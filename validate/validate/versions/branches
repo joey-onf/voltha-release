@@ -1,0 +1,13 @@
+# git branch -r
+
+  origin/HEAD -> origin/master
+  origin/master
+  origin/voltha-2.10
+  origin/voltha-2.3
+  origin/voltha-2.4
+  origin/voltha-2.5
+  origin/voltha-2.6
+  origin/voltha-2.7
+  origin/voltha-2.8
+  origin/voltha-2.9
+

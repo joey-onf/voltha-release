@@ -1,0 +1,9 @@
+## ---------------------------------------------------------------------------
+## Existence of this file identifies the root directory of a project.
+## ---------------------------------------------------------------------------
+
+SUBDIR=voltha-release
+IAM=validate
+
+# [EOF]
+
