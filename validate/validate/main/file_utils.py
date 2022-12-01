@@ -60,6 +60,80 @@ def pushd(path=None):
     finally:
         os.chdir(prev)
 
+## ---------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
+def cat(path:str) -> list[str]:
+    '''Read and return contents of a file.
+
+    :param path: Name of file to read
+    :type  path: str
+
+    :return: Contents of the requested file.
+    :rtype:  list[str]
+    '''
+
+    with open(path, mode='r', encoding='utf-8') as stream:
+        ans = [ line.rstrip() for line in stream.readlines() ]
+
+    return ans
+
+## ---------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
+def traverse\
+    (
+        root:str,
+        incl:list=None,
+        excl:list=None,
+    ) -> list:
+    '''Return a list of files matching a criteria.
+    
+        :param sandbox: Path to target filesystem directory.
+        :type  sandbox: str
+    
+        :param wanted: A         
+        '''
+
+    # semantic-version==2.10.0
+    # semver == 2.13.0
+    
+    # import semantic_version
+    # print("** semver: %s" % semantic_version.version())
+    sandbox = root
+
+    if excl is None:
+        excl = []     # subsdirs ok: non-matching pattern
+    if incl is None:
+        incl = []
+
+    excl_match = []
+    incl_match = []
+
+    for item in excl:
+        if '/' in item:
+            excl_match += [item]
+
+    for item in incl:
+        if '/' in item:
+            incl_match += [item]
+
+    # argv  = main_getopt.get_argv()
+
+    ans = None
+    path = Path(sandbox).resolve()
+
+    ans = []
+    for root, dirs, fyls in os.walk(sandbox):
+        dirs = [val for val in dirs if val not in excl]
+        for fyl in fyls:
+
+            if fyl in excl:
+                continue
+
+            if fyl in incl:
+                ans += [ Path(root + '/' + fyl).as_posix() ]
+
+    return ans
+
 # [SEE ALSO]
 # -----------------------------------------------------------------------
 # https://docs.python.org/3/library/contextlib.html#contextlib.contextmanager        
