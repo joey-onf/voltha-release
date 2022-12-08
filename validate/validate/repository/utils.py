@@ -9,24 +9,96 @@
 ##---]  IMPORTS  [---##
 ##-------------------##
 import pprint
+from random            import randrange
 
 from pathlib           import Path
 from urllib.parse      import urlparse, urljoin
 
+import time
 import validators
 
 import git
 from git               import Repo
 
 from validate.main     import utils           as main_utils
+from validate.main     import argparse        as main_getopt
 from validate.main     import file_utils
+
+## Profiling
+import timeit
+from timeit            import Timer
+# from dis import dis    # disassembler
+
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+class Names:
+    '''Data stream: repository names.'''
+
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
+    def __init__(self):
+        pass
+
+    ## ---------------------------------------------------------------------------
+    ## ---------------------------------------------------------------------------
+    def get\
+        (
+            self,
+            project:bool   = None,
+            component:bool = None,
+            extra:bool     = None,
+        ) -> list[str]:
+        '''Return a list of repository names based on arguments.
+        
+        :param project: Return a list of branch based repository names.
+        :type  project: str
+        
+        :param component: Return a list of tag based repository names.
+        :type  component: str
+        
+        :param extra: Return a list of helper repository names.
+        :type  extra: str
+        
+        ..note: return all repository names unless project or component
+        
+        '''
+
+        argv  = main_getopt.get_argv()
+
+        keys = []
+        if project:
+            keys += ['repo_project']
+        if component:
+            keys += ['repo_component']
+        if extra:
+            keys += ['repo']
+
+        if len(keys) == 0: # else all
+            keys = ['repo_project', 'repo_component', 'repo']
+
+        # Dual iteration loop: combine list arguments
+        dups = [name
+                for key in keys
+                for name in argv[key]]    
+
+        # Unique and sort the result
+        repo_names = list(set(dups))
+        repo_names.sort()
+
+        return repo_names
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 class Rcs:
     '''A wrapper class for interacting with revision control.'''
 
-    errors = None
+    ##----------------------##
+    ##---]  CLASS VARS  [---##
+    ##----------------------##
+    debug   = None
+    trace   = None
+    verbose = None
 
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
@@ -70,6 +142,26 @@ class Rcs:
 
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
+    def format_elapsed(self,
+                       start:int   = None,
+                       end:int     = None,
+                       seconds:int = None,
+                       ) -> str:
+
+        if seconds is not None:
+            pass
+        else:
+            if end is None:
+                end = time.time()
+            elif start is None:
+                raise ValueError("start= or seconds= are required")
+            seconds = end - start
+
+        elapsed = time.strftime('%H:%M:%S', time.gmtime(seconds))
+        return '%-8.8s' % (elapsed)
+    
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
     def get(self, arg) -> bool:
         '''Checkout a repository from revision control.
         
@@ -79,8 +171,6 @@ class Rcs:
         :return: Status based on checkout.
         :rtype : bool
         '''
-
-        self.trace_mode()
 
         url       = None
         repo_name = None
@@ -129,5 +219,52 @@ class Rcs:
 
         ans = Path(sandbox).exists()
         return ans
+
+    def delay(self):
+        if True: # artificial delay
+            rr = randrange(0,3)
+            time.sleep(rr)
+
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
+    def get_repos(self,
+                  repos:list,
+                  debug:bool=None,
+                  ) -> bool:
+        '''Checkout a list of repositories, display elapsed time.'''
+
+        if debug is None:
+            debug = self.debug
+        if debug is None:
+            debug = False
+
+        errors = []
+        repos = list(set(repos))
+        repos.sort()
+
+        enter = time.time()
+        states = []
+        for repo in repos:
+            if debug:
+                print("** clone: %s" % repo)
+
+            # Clone attributes: benchmark, state
+            state = self.get(repo)
+
+            # Profile cloning
+            t1 = Timer(lambda: self.get(repo))
+            seconds = t1.timeit(number=1)
+
+            # Display stats
+            elapsed = self.format_elapsed(seconds=seconds) 
+            print("** ELAPSED: %-8.8s (clone) %s" % (elapsed, repo))
+            states += [state]
+
+        leave = time.time()
+        print('** %s' % ('-' * 75))
+        elapsed = self.format_elapsed(enter, leave)
+        print('**   TOTAL: %-8.8s' % (elapsed))
+
+        return not any(states)
 
 # [EOF]
