@@ -1,5 +1,6 @@
 # -*- makefile -*-
 
 sandbox/
+__pycache__/
 
 # [EOF]

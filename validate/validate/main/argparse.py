@@ -42,7 +42,26 @@ def get_argv():
             arg_dict[arg] = getattr(namespace, arg)
         ARGV = arg_dict
 
+#        if ARGV['debug_hack']:
+#            ARGV['repo_project']   = ['voltha-system-tests']
+#            ARGV['repo_component'] = []
+#            ARGV['repo']           = []
+
     return ARGV
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+def set_argv(args:dict):
+    '''Add read-only keys to the command line argument hash.'''
+
+    global ARGV
+
+    if ARGV is None:
+        ARGV = {} # due to unit testing
+
+    for key,val in args.items():
+        if key not in ARGV:
+            ARGV[key] = val
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -83,8 +102,27 @@ def getopts(argv, debug=None) -> None:
                  # epilog = 'extra-help-text'
                  epilog=\
 '''
-'''                 
+'''
              )
+
+    ## -----------------------------------------------------------------------
+    ## SECTION: Release repositories
+    ## -----------------------------------------------------------------------
+    parser.add_argument('--repo-project',
+                        action  = 'append',
+                        required = True,
+                        default = [
+                            'voltha-helm-charts',
+                            'voltha-system-tests',
+                        ],
+                        help    = 'Name of project repositories',
+                    )
+
+    parser.add_argument('--repo-component',
+                        action  = 'append',
+                        default = [],
+                        help    = 'Name of project components',
+                    )
 
     ## -----------------------------------------------------------------------
     ## SECTION: VOLTHA modes
@@ -94,13 +132,17 @@ def getopts(argv, debug=None) -> None:
                         # required = True,
                         default = 'voltha',
                         help    = 'Name of project to validate',
-                    )
-
+                        )
     parser.add_argument('--release',
                         action  = 'store_true',
                         default = False,
                         help    = 'Enable strict checking for release.',
-                    )
+                        )
+    parser.add_argument('--release-type',
+                        action  = 'store',
+                        default = None,
+                        help    = 'Name of project to validate',
+                        )
 
     ## -----------------------------------------------------------------------
     ## SECTION: Revision control
@@ -109,20 +151,20 @@ def getopts(argv, debug=None) -> None:
                         action  = 'store',
                         type    = ar_at.valid_version,
                         help    = 'Package version to valiate (branch, tag, components, charts)',
-                        ) 
+                        )
 
     # TODO: infer from {project}-{ver}
     parser.add_argument('--branch',
                         action  = 'store',
                         # type    = ar_at.valid_version,
                         help    = 'Expected release branch name/version',
-                        ) 
+                        )
 
     parser.add_argument('--tag',
                         action  = 'store',
                         type    = ar_at.valid_version,
                         help    = 'Expected release tag name/version',
-                        ) 
+                        )
 
     parser.add_argument('--repo',
                         action  = 'append',
@@ -130,7 +172,20 @@ def getopts(argv, debug=None) -> None:
                         help    = 'A list of repositories to include in the release.',
                     )
 
-    
+    ## -----------------------------------------------------------------------
+    ## SECTION: Archive temp sandbox when finished
+    ## -----------------------------------------------------------------------
+    parser.add_argument('--archive',
+                        action  = 'store',
+                        help    = 'Directory used to archive temp workspace',
+                        )
+
+#    [TODO]
+#    parser.add_argument('--sandbox',
+#                        action  = 'store',
+#                        help    = 'Directory holding revision control checkouts.',
+#                        )
+
     ## -----------------------------------------------------------------------
     ## SECTION: Arg storage methods
     ## -----------------------------------------------------------------------
@@ -150,7 +205,7 @@ def getopts(argv, debug=None) -> None:
                         default = None,
                         help    = 'Save argument as a scalar variable.',
                     )
-  
+
     ## ----------------------------------------------------------------------
     ## SECTION: Validate arg values and store
     ## -----------------------------------------------------------------------
@@ -166,7 +221,7 @@ def getopts(argv, debug=None) -> None:
                         default = [],
                         type    = ar_at.valid_url,
                         help    = 'URL(s) to perform actions on.',
-                    ) 
+                    )
 
     ## -----------------------------------------------------------------------
     ## SECTION: Program modes
@@ -177,14 +232,21 @@ def getopts(argv, debug=None) -> None:
                         help    = 'Enable script debug mode',
                     )
 
+    parser.add_argument('--debug-hack',
+                        action  = 'store_true',
+                        default = False,
+                        help    = 'Enable custom debugging',
+                    )
+
     parser.add_argument('--todo',
                         action  = ar_ac.opt_todo_action,
                         help    = 'Display program enhancement list.',
                     )
 
     parser.add_argument('--trace',
-                        action  = 'append',
-                        default = [],
+                        action = 'store_true',
+#                        action  = 'append',
+#                        default = [],
                         help    = 'Resource names to trace during system probing',
                     )
 
@@ -199,13 +261,37 @@ def getopts(argv, debug=None) -> None:
                         default = False,
                         help    = 'Enable script verbose mode',
                     )
-    
+
     ## -----------------------------------------------------------------------
     ## SECTION: Program version - increment when script changes
     ## -----------------------------------------------------------------------
     parser.add_argument('--version', action='version', version='%(prog)s 0.1')
 
     namespace = parser.parse_args()
+    validate_composite()
     return
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+def validate_composite():
+    '''Detect invalid command line argument permutations.'''
+
+    argv = get_argv()
+    if argv['debug_hack'] and argv['release_type']:
+        pprint.pprint({
+            'debug_hack' : argv['debug_hack'],
+            'relase_type' : argv['release_type'],
+        })
+        raise ValueError("Detected conflicting arguments --debug-hack and --release-type")
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+def todo():
+    '''Future enhancement list.'''
+
+    print('''
+[TODO: argparse]
+  o --release-type and --debug-hack conflict: detect and raise exception
+''')
 
 # [EOF]

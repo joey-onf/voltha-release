@@ -17,9 +17,8 @@ import tempfile
 from pathlib           import Path
 from validate.main.file_utils import cat, pushd, tempdir, traverse
 
-
 class TestStringMethods(unittest.TestCase):
- 
+
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def test_cat(self):
@@ -27,14 +26,14 @@ class TestStringMethods(unittest.TestCase):
         src = Path(__file__).resolve().as_posix()
         stream = cat(src)
         self.assertTrue(any('env' in line for line in stream))
- 
+
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def test_tempdir(self):
 
         start = Path('.').resolve().as_posix()
 
-        with tempdir():  
+        with tempdir():
             tmp = Path('.').resolve().as_posix()
             self.assertEqual(tmp, start)
 
@@ -49,7 +48,7 @@ class TestStringMethods(unittest.TestCase):
             invalid = '/dev/null'
             with pushd(path=invalid):
                 raise Exception('ERROR: Testing should not enter here')
- 
+
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def test_pushd(self):
@@ -76,7 +75,7 @@ class TestStringMethods(unittest.TestCase):
 
         got = traverse('.', incl=[pat], excl=[pat])
         self.assertEqual(got, [])
-                
+
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def test_unique_tmp(self):
@@ -104,8 +103,8 @@ class TestStringMethods(unittest.TestCase):
 
         leave = Path('.').resolve().as_posix()
         self.assertEqual(enter, leave)
-                   
-                
+
+
 ##----------------##
 ##---]  MAIN  [---##
 ##----------------##

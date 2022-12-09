@@ -28,12 +28,14 @@ class tempdir(ContextDecorator):
 
     def __init__(self):
         self.path = tempfile.mkdtemp()
+        return
 
     def __enter__(self):
         return self.path
 
     def __exit__(self, exc_type, exc, exc_tb):
         rmtree(self.path)
+        return
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -41,11 +43,11 @@ class tempdir(ContextDecorator):
 def pushd(path=None):
     """Closure: chdir with state retention.
        o chdir into a target directory to perform a task then return.
-       o if path= not passed 
-        
+       o if path= not passed
+
     :param path: Target directory name
     :type  path: string
-        
+
     :return  context with pwd=argument passed
     :rtype:
     """
@@ -86,16 +88,16 @@ def traverse\
         excl:list=None,
     ) -> list:
     '''Return a list of files matching a criteria.
-    
+
         :param sandbox: Path to target filesystem directory.
         :type  sandbox: str
-    
-        :param wanted: A         
+
+        :param wanted: A
         '''
 
     # semantic-version==2.10.0
     # semver == 2.13.0
-    
+
     # import semantic_version
     # print("** semver: %s" % semantic_version.version())
     sandbox = root
@@ -136,7 +138,7 @@ def traverse\
 
 # [SEE ALSO]
 # -----------------------------------------------------------------------
-# https://docs.python.org/3/library/contextlib.html#contextlib.contextmanager        
+# https://docs.python.org/3/library/contextlib.html#contextlib.contextmanager
 # -----------------------------------------------------------------------
 
 # EOF

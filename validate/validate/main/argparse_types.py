@@ -10,7 +10,7 @@
 # import argparse
 from argparse import ArgumentTypeError
 import validators
-import semantic_version
+# import semantic_version
 import semver
 
 from pathlib           import Path
@@ -76,7 +76,7 @@ def valid_url(value: str) -> str:
 def valid_spreadsheet(value: str) -> str:
     '''Custom argparse type for output spreadsheet validation.
 
-    :param value: Command line argument value to check (--spread-out) 
+    :param value: Command line argument value to check (--spread-out)
     :type  value: str
 
     :return: Path to a creatable spreadsheet file.
