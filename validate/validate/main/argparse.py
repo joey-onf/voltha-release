@@ -16,62 +16,174 @@ namespace = None
 import argparse
 import pprint
 
-from validate.main         import utils              as main_utils
+from validate.main.utils   import iam
 from validate.main         import argparse_actions   as ar_ac
 from validate.main         import argparse_types     as ar_at
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-def get_argv():
+def get_argv(keys:list=None) -> dict:
     """Retrieve parsed command line switches.
 
     :return: Parsed command line argument storage
     :rtype : dict
 
-    .. versionadded:: 1.0
+    .. versionadded:: 1.1
     """
 
     global ARGV
-    global namespace
 
     if ARGV is None:
+        set_argv(None, reset=True)
+
+    tmp = keys
+    if tmp is None:
+        keys = {} if ARGV is None else ARGV.keys()
+
+    ans  = {}
+    for key in keys:
+        ans[key] = ARGV[key]
+
+    return ans
+
+# -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+def set_argv(arg, reset:bool=None):
+    '''Add read-only keys to the parsed, command line argument hash.
+
+    :param args: Values to add
+    :type  args: dict, conditional
+
+    :param reset: Unit test option, clear value cache.
+    :type  reset: bool, conditional
+
+    .. versionadded:: 1.0
+    '''
+
+    global ARGV
+
+    if reset:
+        ARGV = {}
+
+    if ARGV and not reset:
+        raise Exception("Attempt to clear cache w/o reset=True")
+    else:
+        cache = get_namespace()
+
         # Normalize argspace/namespace into a getopt/dictionary
         # Program wide syntax edits needed: args['foo'] => args.foo
         arg_dict = {}
-        for arg in vars(namespace):
-            arg_dict[arg] = getattr(namespace, arg)
+        for arg in vars(cache):
+            arg_dict[arg] = getattr(cache, arg)
+
         ARGV = arg_dict
 
-#        if ARGV['debug_hack']:
-#            ARGV['repo_project']   = ['voltha-system-tests']
-#            ARGV['repo_component'] = []
-#            ARGV['repo']           = []
-
-    return ARGV
+    return
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-def set_argv(args:dict):
-    '''Add read-only keys to the command line argument hash.'''
+def clear_namespace():
+    '''Unit test option, clear parsed parameters.
+
+    .. versionadded:: 1.0
+    '''
+
+    global namespace
+    global ARGV
+
+    namespace = None
+    ARGV      = None
+    return
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+def get_namespace():
+    '''Retrieve cached, parsed, command line arguments.
+
+    .. versionadded:: 1.0
+    '''
+
+    global namespace
+    return namespace
+
+# -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+def set_namespace(arg, reset:bool=None):
+    '''Add a read-only namespace to the cache.
+
+    ..note: argparse - cache contains argparse.namespace.
+    ..note: unittest - cache contains dict.
+
+    :param args: Values to add
+    :type  args: namespace or dict
+
+    :param reset: Unit test option, clear value cache.
+    :type  reset: bool, conditional
+
+    .. versionadded:: 1.0
+    '''
+
+    global namespace
+
+    if reset:
+        namespace = None
+
+    if namespace and not reset:
+        raise Exception("Attempt to clear cache w/o reset=True")
+    else:
+        namespace = arg
+
+    return
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+def set_argv(args=None, reset:bool=None) -> None:
+    '''Add read-only keys to the command line argument hash.
+
+    :param args: Values to add
+    :type  args: dict
+
+    :param reset: Unit test option, clear value cache.
+    :type  reset: bool
+    '''
 
     global ARGV
 
     if ARGV is None:
         ARGV = {} # due to unit testing
 
+    if args is None:
+        args = {}
+    elif isinstance(args, argparse.Namespace):
+        tmp = vars(args)
+    elif isinstance(args, dict):
+        tmp = args
+    else:
+        err = 'Detected invalid type conversion for argument args='
+        msg = pprint.pformat({
+            'iam'   : iam(),
+            'args'  : args,
+            'ARGV'  : ARGV,
+            'reset' : reset,
+            'type'  : type(args),
+        }, indent=4)
+        raise ValueError('\n'.join(['', err, msg]))
+
+    # Read-only upates
     for key,val in args.items():
         if key not in ARGV:
             ARGV[key] = val
 
+    return
+
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-def getopts(argv, debug=None) -> None:
+def getopts(debug:bool=None) -> None:
     """Parse command line args, check options and pack into a hashmap
 
-    :param argv: values passed on the command line
-    :param debug: optional flag to enable debug mode
+    :param debug: Enable deug mode
+    :type  debug: bool, conditional
 
-    :return: Digested command line arguments
     :rtype : dict
 
     :raises  ValueError
@@ -82,15 +194,8 @@ def getopts(argv, debug=None) -> None:
 
     ..todo: support --dry-run, deploy actions w/o final import request.
 
-    ..todo: Strange decorate a switch with required=True.  Pass switch through
-    ..todo: --response fails even though value(s) are in parsed args namespace.
-
-    .. versionadded:: 1.1
+    .. versionadded:: 1.2
     """
-
-    global namespace
-
-    iam = main_utils.iam()
 
     if debug is None:
         debug = False
@@ -268,21 +373,9 @@ def getopts(argv, debug=None) -> None:
     parser.add_argument('--version', action='version', version='%(prog)s 0.1')
 
     namespace = parser.parse_args()
-    validate_composite()
+    set_argv(namespace, reset=True)
+
     return
-
-## -----------------------------------------------------------------------
-## -----------------------------------------------------------------------
-def validate_composite():
-    '''Detect invalid command line argument permutations.'''
-
-    argv = get_argv()
-    if argv['debug_hack'] and argv['release_type']:
-        pprint.pprint({
-            'debug_hack' : argv['debug_hack'],
-            'relase_type' : argv['release_type'],
-        })
-        raise ValueError("Detected conflicting arguments --debug-hack and --release-type")
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -291,7 +384,7 @@ def todo():
 
     print('''
 [TODO: argparse]
-  o --release-type and --debug-hack conflict: detect and raise exception
+  o --release-type and --debug-hack conflict: detect and raise exception.
 ''')
 
 # [EOF]
