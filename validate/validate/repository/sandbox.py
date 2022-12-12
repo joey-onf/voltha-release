@@ -25,12 +25,19 @@ class Sbx:
     '''.'''
 
     repo_name = None
+    # __sandbox_cache__ = None
 
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def __init__(self, repo_name:str=None):
-        self.repo_name = repo_name
 
+#        if '__sandbox_cache__' not in globals():
+#            print(' ** %s: constructor init %s' % (iam(), '__sandbox_cache__'))
+#            global __sandbox_cache__
+#            __sandbox_cache__ = 'foo'
+
+        self.repo_name = repo_name
+        
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def get_branches(self) -> list[str]:
@@ -70,32 +77,35 @@ class Sbx:
     def get_repo(self, repo_name:str=None):
         '''.'''
 
-        global sandbox
-
         if repo_name is None:
             repo_name = self.repo_name
-        
-        repo_path = Path(sandbox + '/' + repo_name).as_posix()
-        return Repo(repo_path)
-    
+
+        sandbox = self.get_sandbox(repo_name)
+        return Repo(sandbox)
+
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
-    def get_sandbox(self) -> str:
+    def get_sandbox(self, repo_name:list[str]=None) -> str:
         '''.'''
 
-        global sandbox
-        return sandbox
-    
+        global ___sandbox_cache__
+        sandbox = __sandbox_cache__
+
+        ans = sandbox \
+            if repo_name is None\
+            else Path(sandbox + '/' + repo_name).as_posix()
+            
+        return ans
+
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def set_sandbox(self, path:str=None):
         '''.'''
-        
-        global  sandbox
+
+        global __sandbox_cache__
         if path is None:
             path = Path('.').resolve().as_posix()
 
-        print('** %s: sandbox is %s' % (iam(), path))
-        sandbox = path
+        globals()['__sandbox_cache__'] = path
 
 # [EOF]

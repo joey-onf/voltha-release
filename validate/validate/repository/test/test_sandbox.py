@@ -14,7 +14,8 @@ import pprint
 import unittest
 
 import git
-from git import Repo
+from git               import Repo
+from pathlib           import Path
 
 from validate.repository.sandbox  import Sbx
 
@@ -34,7 +35,6 @@ class TestStringMethods(unittest.TestCase):
         with pushd() as persist:
 
             ## Configure storage
-            Rcs().set_sandbox()
             Sbx().set_sandbox()
 
             path = Sbx().get_sandbox()
@@ -60,6 +60,36 @@ class TestStringMethods(unittest.TestCase):
             self.assertTrue(len(tags) > 5)
             self.assertNotIn(or_vo, ''.join(tags))
 
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
+    def test_get_set_bystr(self):
+        '''.'''
+
+        exp = 'dev/null'
+        Sbx().set_sandbox(exp)
+        got = Sbx().get_sandbox()
+        self.assertEqual(got, exp)
+
+        subdirs = ['foo', 'foo/bar', 'foo/bar/tans']
+        for repo_name in subdirs:
+            got = Sbx().get_sandbox(repo_name)
+            self.assertIn(repo_name, got)
+        
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
+    def test_get_set_bydir(self):
+        '''.'''
+
+        repo_name = 'config-pods'
+        # repo_name = 'voltha-system-tests'
+        with pushd() as persist:
+
+            exp = Path('.').resolve().as_posix()
+            Sbx().set_sandbox()
+            got = Sbx().get_sandbox()
+
+            self.assertEqual(got, exp)
+            
 ##----------------##
 ##---]  MAIN  [---##
 ##----------------##

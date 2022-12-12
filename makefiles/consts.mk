@@ -27,5 +27,6 @@ HIDE        ?= @
 
 env-clean   = /usr/bin/env --ignore-environment
 
+export SHELL := /bin/bash -euo pipefail
 
 # [EOF]

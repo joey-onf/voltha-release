@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # -----------------------------------------------------------------------
 
-.DEFAULT_GOAL := foo
+.DEFAULT_GOAL := all
 
 ##-------------------##
 ##---]  GLOBALS  [---##
@@ -13,15 +13,17 @@
 ONF_TOP	    ?= ..
 ONF_MAKE    ?= $(ONF_TOP)/makefiles
 
-include $(ONF_MAKE)/lint/include.mk
-include $(ONF_MAKE)/python/include.mk
+include $(ONF_MAKE)/include.mk
+# include $(ONF_MAKE)/lint/include.mk
+# include $(ONF_MAKE)/python/include.mk
 
 TOP         ?= .
 MAKEDIR     ?= $(TOP)/makefiles
 
-PYTHON      ?= $(HOME)/.venv/3.10.6/bin/python 
+PYTHON      ?= $(HOME)/.venv/3.10.6/bin/python
 
 main        := bin/validate.py
+venv-name   := .venv
 
 ##--------------------##
 ##---]  INCLUDES  [---##
@@ -36,30 +38,35 @@ include $(MAKEDIR)/projects/include.mk
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-all: foo
+all: args
+# all: clean-args
 
-foo: clean args
+clean-args : clean args
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 main-args := $(null)
 
-main-args += --debug
-# main-args += --trace
+# main-args += --debug
+main-args += --trace
 # main-args += --verbose
 
-# main-args += --my-host foo.bar.org
-# main-args += --my-list itemA
-# main-args += --my-list itemB
-# main-args += --my-scalar 5
+# main-args += --repo voltha-system-tests
+# main-args += --repo voltha-docs
+# main-args += --repo voltha-helm-charts
+# main-args += --repo pod-configs
 
-args:
-	$(HIDE)$(main) $(main-args) $(voltha-args)
+# voltha-args += --debug-hack
+# voltha-args += --archive /dev/null
+
+.PHONY: args
+args: $(venv-name)
+	$(HIDE) source $(venv-name)/bin/activate && $(main) $(main-args) $(voltha-args)
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 edit:
-	./edit.sh
+	-./edit.sh
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -93,15 +100,49 @@ version:
 ## -----------------------------------------------------------------------
 check test: $(test-targets)
 
-# test-args += -m unittest
-# test-python:
-#	$(PYTHON) $(test-args) discover -v
+# Display usage
+test-path-arg = validate/repository/test/test_release.py
+test-path ?= $(error $(MAKE) $@ test-path=$(test-path-arg) is required)\
+
+# invoke with
+check-one:
+	$(PYTHON) -m unittest $(test-path)
+xy:
+	$(PYTHON) -m unittest $(test-path-arg)
+
+packages-args += gitpython
+packages-args += pyyaml
+packages-args += semver
+packages-args += semantic_version
+packages-args += validators
+
+$(venv-name):
+	@echo "============================="
+	@echo "Installing python virtual env"
+	@echo "============================="
+	virtualenv -p python3 $@               \
+	&& source $(venv-name)/bin/activate    \
+	&& python -m pip install --upgrade pip \
+#
+#	[ -e 'requirements.txt' ] && python -m pip install -r requirements.txt
+#
+	@echo "============================="
+	@echo "Installing packages"
+	@echo "============================="
+	source $(venv-name)/bin/activate && pip install $(packages-args)
+	$(null)
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 clean ::
 	-$(HOME)/etc/cleanup
 	$(RM) -r sandbox
+	$(RM) -r $(venv-name)
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+sterile :: clean
+	$(RM) -r /tmp/tmp*
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
