@@ -31,11 +31,6 @@ class Sbx:
     ## -----------------------------------------------------------------------
     def __init__(self, repo_name:str=None):
 
-#        if '__sandbox_cache__' not in globals():
-#            print(' ** %s: constructor init %s' % (iam(), '__sandbox_cache__'))
-#            global __sandbox_cache__
-#            __sandbox_cache__ = 'foo'
-
         self.repo_name = repo_name
         
     ## -----------------------------------------------------------------------

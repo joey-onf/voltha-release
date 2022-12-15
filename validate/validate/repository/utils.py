@@ -20,15 +20,34 @@ import validators
 import git
 from git               import Repo
 
-from validate.main     import utils           as main_utils
+from validate.main.utils  import iam
 from validate.main     import argparse        as main_getopt
 from validate.main     import file_utils
+
+from validate.repository.sandbox  import Sbx
+
+
 
 ## Profiling
 import timeit
 from timeit            import Timer
 # from dis import dis    # disassembler
 
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+class MyRepo:
+    '''.'''
+
+    repo_name = None
+    
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
+    def get_repo(self, repo_name:str):
+        sandbox = Sbx().get_sandbox()
+        # sandbox = Rcs().get_sandbox()
+        repo_path = Path(sandbox + '/' + repo_name).as_posix()
+        return Repo(repo_path)
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -100,6 +119,8 @@ class Rcs:
     trace   = None
     verbose = None
 
+    sandbox = None
+
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def __init__(self,
@@ -121,7 +142,7 @@ class Rcs:
             self.verbose = False
 
         return
- 
+
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def trace_mode(self):
@@ -207,19 +228,20 @@ class Rcs:
             if val is None:
                 raise ValueError('Unable to determine %s=' % key)
 
-        sbxdir  = 'sandbox'
-        sandbox = '%s/%s' % (sbxdir, repo_name)
-
-        path = Path(sbxdir)
+        sandbox = Sbx(repo_name).get_sandbox(repo_name=repo_name)
+        path = Path(sandbox)
         if not path.exists():
             path.mkdir(mode=0o700, parents=True, exist_ok=True)
 
-        if not Path(sandbox).exists(): 
-           Repo.clone_from(url, to_path=sandbox)
+        sbx_git = Path(sandbox + '/' + '.git')
+        if not Path(sbx_git).exists(): 
+            Repo.clone_from(url, to_path=sandbox)
 
         ans = Path(sandbox).exists()
         return ans
 
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
     def delay(self):
         if True: # artificial delay
             rr = randrange(0,3)

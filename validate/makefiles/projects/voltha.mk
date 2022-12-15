@@ -24,6 +24,7 @@ VER ?= 2.10
 ## -----------------------------------------------------------------------
 # voltha-args += --debug
 # voltha-args += --verbose
+#  voltha-args += --release   ## will trip NotYetImplementedError(s)
 voltha-args += --sandbox /var/tmp/sandbox
 # voltha-args += --archive /var/tmp/release-debug-voltha
 
@@ -94,6 +95,10 @@ voltha-args += $(call add-component,voltha-comp)
 #  https://gerrit.opencord.org/ci-management.git
 voltha-repos += ci-management
 voltha-repos += voltha-test-manifest
+voltha-repos += voltha-bal
+
+# https://docs.voltha.org/master/release_notes/voltha_2.10.html#openolt-agent-packages
+
 voltha-args += $(call add-repo,voltha-repos)
 
 ## [git clone]

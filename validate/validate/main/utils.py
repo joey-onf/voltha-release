@@ -15,7 +15,7 @@ def iam(frame=None):
     """Return name of a called method."""
 
     if frame is None:
-        frame = 1
+        frame = 1    # 2 is parent method
 
     func_name = sys._getframe(frame).f_code.co_name # pylint: disable=protected-access
     iam       = "%s::%s" % (__name__, func_name)

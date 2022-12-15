@@ -26,15 +26,16 @@ from validate.main.utils\
 class elapsed_time(ContextDecorator):
     '''Wrap a logic block within a closure that reports elapsed time.'''
 
-    def __init__(self, debug:bool=None):
+    def __init__(self, banner:str, debug:bool=None):
         '''.'''
 
         self.iam = iam(frame=2) # parent
-        
+
         if debug is None:
             debug = False
         self.debug = debug
 
+        print(banner)
         if debug:
             print('')
             print('** %s: ENTER' % iam)

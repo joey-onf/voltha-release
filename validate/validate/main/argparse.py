@@ -48,7 +48,7 @@ def get_argv(keys:list=None) -> dict:
 
 # -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-def set_argv(arg, reset:bool=None):
+def set_argv_extra(arg, reset:bool=None):
     '''Add read-only keys to the parsed, command line argument hash.
 
     :param args: Values to add
@@ -75,6 +75,11 @@ def set_argv(arg, reset:bool=None):
         arg_dict = {}
         for arg in vars(cache):
             arg_dict[arg] = getattr(cache, arg)
+
+        import pdb
+        pdb.set_trace()
+        ## Why is this defaulting to true ?
+        argv['release'] = False
 
         ARGV = arg_dict
 
@@ -152,8 +157,9 @@ def set_argv(args=None, reset:bool=None) -> None:
     if ARGV is None:
         ARGV = {} # due to unit testing
 
+    tmp = None
     if args is None:
-        args = {}
+        tmp = {}
     elif isinstance(args, argparse.Namespace):
         tmp = vars(args)
     elif isinstance(args, dict):
@@ -170,7 +176,7 @@ def set_argv(args=None, reset:bool=None) -> None:
         raise ValueError('\n'.join(['', err, msg]))
 
     # Read-only upates
-    for key,val in args.items():
+    for key,val in tmp.items():
         if key not in ARGV:
             ARGV[key] = val
 
@@ -285,11 +291,10 @@ def getopts(debug:bool=None) -> None:
                         help    = 'Directory used to archive temp workspace',
                         )
 
-#    [TODO]
-#    parser.add_argument('--sandbox',
-#                        action  = 'store',
-#                        help    = 'Directory holding revision control checkouts.',
-#                        )
+    parser.add_argument('--sandbox',
+                        action  = 'store',
+                        help    = 'Directory holding revision control checkouts.',
+                        )
 
     ## -----------------------------------------------------------------------
     ## SECTION: Arg storage methods

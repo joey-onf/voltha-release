@@ -28,6 +28,24 @@ class TestStringMethods(unittest.TestCase):
 
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
+    def test_normalize(self):
+        '''Verify basic version string handling.'''a
+
+        zeros = [ '.'.join(['0' 
+        stream=\
+            {
+                ''      : '',
+                '0'      : '0',
+                '1.2.3' : '1.2.3',
+            }
+
+        obj = versions.Ver()
+        for arg,exp in stream.items():
+            got = obj.normalize(arg)
+            self.assertEqual(got, exp, "normalize(%s) failed" % arg)
+            
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
     def get_invalid(self):
 
         base = Path(__file__).parent.as_posix()

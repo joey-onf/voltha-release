@@ -37,12 +37,14 @@ from validate.proto        import myyaml
 from validate.proto        import utils           as proto
 
 from validate.main.context_utils\
-                           import elapsed_time
+    import elapsed_time
 
-from validate.repository   import utils           as repo_utils
-from validate.repository.sandbox  import Sbx
-
-
+from validate.repository\
+    import utils           as repo_utils
+from validate.repository.sandbox\
+    import Sbx
+from validate.checkup.check_version_file\
+    import ByFile
 
 ## ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
@@ -132,6 +134,12 @@ def process():
     
     print('** Repository type: project')
 
+    sandbox = Sbx().get_sandbox()
+    import pdb
+
+    ## Verify VERSION file contents.
+    pdb.set_trace()
+    ByFile().version_file(sandbox)
     
     ## Verify[branch]: voltha-2.11
     obj = check_by.By(trace=False)
@@ -154,7 +162,7 @@ def process():
         if False:
             raise ValueError('\n'.join(['', err, '', msg, '']))
         else:
-            print('\n'.join(['', err, '', msg, '']))
+            errors += ['\n'.join(['', err, '', msg, ''])]
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -262,6 +270,8 @@ def init(argv_raw) -> None:
 def main(argv_raw):
     '''.'''
 
+    start = Path('.').resolve().as_posix()
+
     init(argv_raw)
     argv = main_getopt.get_argv()
     if argv['verbose']:
@@ -281,6 +291,7 @@ def main(argv_raw):
             distutils.dir_util.copy_tree('.', argv['archive'])
 
     os.chdir(start)
+    print("ALL DONE")
 
 ##----------------##
 ##---]  MAIN  [---##

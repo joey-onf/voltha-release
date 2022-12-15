@@ -37,6 +37,23 @@ class tempdir(ContextDecorator):
         rmtree(self.path)
         return
 
+class Tempdir(ContextDecorator):
+
+    def __init__(self):
+        self.path = tempfile.mkdtemp()
+        return
+
+    def __enter__(self):
+        return self.path
+
+    def __exit__(self, exc_type, exc, exc_tb):
+        rmtree(self.path)
+        return
+
+    def get(self) -> str:
+        return self.path
+        return
+    
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 @contextmanager

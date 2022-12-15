@@ -11,10 +11,13 @@
 import pprint
 from pathlib           import Path
 
+import semver
 from semver            import VersionInfo
+import semantic_version # .Version.coerce
 
 from validate.main     import utils           as main_utils
-from validate.main     import file_utils
+from validate.main.file_utils\
+    import cat
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -97,7 +100,7 @@ class Ver:
         self.major   = major
         self.minor   = minor
         self.patch   = patch
-        
+
         return
 
     ## -----------------------------------------------------------------------
@@ -107,10 +110,21 @@ class Ver:
 
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
+    def get_errors(self) -> list[str]:
+        return self.errors
+
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
+    def set_errors(self, data:list):
+        self.errors += data
+
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
     def trace_mode(self):
         if self.trace:
             import pdb
             pdb.set_trace()
+
         # return to caller
 
     ## -----------------------------------------------------------------------
@@ -123,7 +137,7 @@ class Ver:
             ans = VersionInfo.isvalid(version)
 
         return ans
-    
+
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def check_ver_by_file(self, fyl:str, debug=None) -> bool:
@@ -135,13 +149,13 @@ class Ver:
         :param debug: Enable debug mode
         :type  debug: bool, conditional
 
-        :return: True if file version string is valid. 
+        :return: True if file version string is valid.
         :rtype: bool
         '''
 
         # check_trace_mode(trace)
         self.errors = []
-        
+
         if debug is None:
             debug = False
 
@@ -167,7 +181,7 @@ class Ver:
             what  = None,      # Detection type: major(release), minor, patch
         ) -> bool:
         '''Detect invalid release version strings.
-        
+
         :param what: Type of version string conversion to perform.
         :type  what: str
 
@@ -210,7 +224,7 @@ class Ver:
             raise ValueError('No conversion type (major=, minor=) sepcifed')
 
         return version
-         
+
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def check_ver_by_project(self, ver:str, exp:str, debug=None) -> bool:
@@ -247,7 +261,7 @@ class Ver:
     # 2) tag does not contain -dev or decorations
     # 3) tag contains target or ver-1 if not release.
     # -----------------------------------------------
-    
+
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def get_errors(self) -> list:
@@ -268,20 +282,20 @@ class Ver:
         '''
 
         ans = None
-        if not isinstance(fyl, str):
-            pass
-
-        elif not Path(fyl).exists():
-            pass
-
+        if not Path(fyl).exists():
+            err = 'File does not exist'
+            msg = pprint.pformat({
+                'iam'     : iam(),
+                'path'    : fyl,
+            }, indent=4)
+            errors += ['\n'.join(['', err, '', msg, ''])]
         else:
-
             self.trace_mode()
 
-            streams = file_utils.cat(fyl)
+            streams = cat(fyl)
             # Flatten list-of-lists created by cat().split()
             tokens  = [token for sublist in streams for token in sublist.split()]
-            
+
             for token in tokens:
                 if VersionInfo.isvalid(token):
                     ans = token
@@ -289,10 +303,39 @@ class Ver:
 
         return ans
 
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
+    def normalize(self, raw) -> str:
+        '''Convert version string into a semVer.'''
+
+        # ---------------------------
+        # prefix skip: voltha-2.11, v1.0
+        # ---------------------------
+        skip = None
+        for idx in range(0,len(raw)):
+            if raw[idx].isdigit():
+                if skip is not None:
+                    raw = raw[skip:]
+                break
+            skip = 1 + idx
+
+        try:
+            VersionInfo.isvalid(raw)
+            version = raw
+        except ValueError as err:
+            # Unverified
+            version = semantic_version.Version.coerce(raw)
+
+        if not VersionInfo.isvalid(version):
+            raise ValueError('Version string is incorrect: %s' % ver)
+        
+        return version
+    
 # -----------------------------------------------------------------------
 # ..seealso: https://semver.org/
 # ..seealso: https://python-semanticversion.readthedocs.io/en/latest/
 # ..seealso: https://pypi.org/project/semver/
+# ..seealso: https://about.gitlab.com/blog/2021/09/28/generic-semantic-version-processing/
 # -----------------------------------------------------------------------
 
 # [EOF]
