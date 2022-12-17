@@ -18,6 +18,8 @@ from git                  import Repo
 
 from validate.main.utils  import iam
 from validate.main        import argparse        as main_getopt
+from validate.main.file_utils\
+    import traverse
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -52,20 +54,17 @@ class Sbx:
 
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
-    def get_tags(self) -> list[str]:
-        '''Return a list of repository tag names from the current sandbox.'''
+    def get_repo_names(self):
+        '''Verify repository name gathering.'''
 
-        ## See: release.Branches().get()
-        repo_name = self.repo_name
-        repo = self.get_repo()
-        tags=\
-            [
-                ref.name
-                for ref in repo.refs \
-                if isinstance(ref, git.refs.tag.TagReference)
-            ]
-
-        return tags
+        sandbox = self.get_sandbox()
+        paths = traverse(root=sandbox, incl=['.git'])
+        ans = []
+        for path in paths:
+            fields = Path(path).parts
+            idx    = fields.index('.git')
+            ans    += [fields[-2]]
+        return ans
     
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
@@ -77,7 +76,7 @@ class Sbx:
 
         sandbox = self.get_sandbox(repo_name)
         return Repo(sandbox)
-
+    
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def get_sandbox(self, repo_name:list[str]=None) -> str:
@@ -103,4 +102,21 @@ class Sbx:
 
         globals()['__sandbox_cache__'] = path
 
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
+    def get_tags(self) -> list[str]:
+        '''Return a list of repository tag names from the current sandbox.'''
+
+        ## See: release.Branches().get()
+        repo_name = self.repo_name
+        repo = self.get_repo()
+        tags=\
+            [
+                ref.name
+                for ref in repo.refs \
+                if isinstance(ref, git.refs.tag.TagReference)
+            ]
+
+        return tags
+        
 # [EOF]

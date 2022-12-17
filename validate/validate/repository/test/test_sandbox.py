@@ -62,6 +62,33 @@ class TestStringMethods(unittest.TestCase):
 
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
+    def test_get_repo_names(self):
+        '''.'''
+
+        repo_names = [
+            # 'config-pods',
+            'voltha-docs', 'voltha-system-tests']
+        with pushd() as persist:
+
+            ## Configure storage
+            Sbx().set_sandbox()
+
+            path = Sbx().get_sandbox()
+            self.assertIsInstance(path, str)
+            self.assertIn('tmp/', path)
+
+            ## Create a repo object for access
+            for repo_name in repo_names:
+                Rcs().get(repo_name)
+
+            ans = Sbx().get_repo_names()
+            pprint.pprint(ans)
+                
+#            repo = Sbx(repo_name=repo_name).get_repo()            
+#            self.assertIsInstance(repo, git.Repo)
+            
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
     def test_get_set_bystr(self):
         '''.'''
 

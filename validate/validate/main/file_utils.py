@@ -80,6 +80,11 @@ def pushd(path=None):
         os.chdir(prev)
 
 ## ---------------------------------------------------------------------------
+## Intent: Retrieve and return contents of a file on disk.
+## ---------------------------------------------------------------------------
+## Usage:
+##   from validate.main.file_utils import cat
+##   print( cat('/etc/passwd') )
 ## ---------------------------------------------------------------------------
 def cat(path:str) -> list[str]:
     '''Read and return contents of a file.
@@ -97,6 +102,13 @@ def cat(path:str) -> list[str]:
     return ans
 
 ## ---------------------------------------------------------------------------
+## Intent: Traverse a filesystem gathering paths that match a pattern.
+## ---------------------------------------------------------------------------
+## Usage:
+##   from validate.main.file_utils import traverse
+##   fyls = traverse(root='.', incl=['.gitreview'])
+##   for fyl in fyls:
+##       print(fyl)
 ## ---------------------------------------------------------------------------
 def traverse\
     (
@@ -127,6 +139,9 @@ def traverse\
     excl_match = []
     incl_match = []
 
+    ## ----------------------------------
+    ## Build a list of filtering patterns
+    ## ----------------------------------
     for item in excl:
         if '/' in item:
             excl_match += [item]
@@ -135,19 +150,21 @@ def traverse\
         if '/' in item:
             incl_match += [item]
 
-    # argv  = main_getopt.get_argv()
-
     ans = None
     path = Path(sandbox).resolve()
-
+ 
+    ## ---------------------------------------------------------------
+    ## Recursive traversal, filter and compare each filesystem element
+    ## ---------------------------------------------------------------
     ans = []
     for root, dirs, fyls in os.walk(sandbox):
         dirs = [val for val in dirs if val not in excl]
+        for name in dirs:
+            if name in incl:
+                ans += [ Path(root + '/' + name).as_posix() ]
         for fyl in fyls:
-
             if fyl in excl:
                 continue
-
             if fyl in incl:
                 ans += [ Path(root + '/' + fyl).as_posix() ]
 

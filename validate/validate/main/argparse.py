@@ -249,6 +249,16 @@ def getopts(debug:bool=None) -> None:
                         default = False,
                         help    = 'Enable strict checking for release.',
                         )
+    parser.add_argument('--release-pre',
+                        action  = 'store_true',
+                        default = False,
+                        help    = 'Enable pre-release validation.',
+                        )
+    parser.add_argument('--release-post',
+                        action  = 'store_true',
+                        default = False,
+                        help    = 'Enable post-release validate.',
+                        )
     parser.add_argument('--release-type',
                         action  = 'store',
                         default = None,
@@ -293,6 +303,7 @@ def getopts(debug:bool=None) -> None:
 
     parser.add_argument('--sandbox',
                         action  = 'store',
+                        type    = ar_ac.valid_directory_exists,
                         help    = 'Directory holding revision control checkouts.',
                         )
 
