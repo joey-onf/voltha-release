@@ -13,7 +13,8 @@
 import pprint
 import unittest
 
-from validate.main     import argparse     as argp
+from validate.main.argparse.utils\
+    import Argv
 
 class TestStringMethods(unittest.TestCase):
 
@@ -22,22 +23,22 @@ class TestStringMethods(unittest.TestCase):
     def test_namespace(self):
 
         exp = {'a':'b', 'c':'d'}
-        argp.set_namespace(exp)
-        got = argp.get_namespace()
+        Argv().set_namespace(exp)
+        got = Argv().get_namespace()
         self.assertDictEqual(got, exp)
 
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def test_namespace_assert(self):
 
-        argp.clear_namespace()
+        Argv().clear_namespace()
 
         exp = {'a':'b', 'c':'d'}
-        argp.set_namespace(exp)
+        Argv().set_namespace(exp)
 
         inv = {'invalid':True}
         with self.assertRaises(Exception) as cm:
-            argp.set_namespace(inv)
+            Argv().set_namespace(inv)
             self.assertIn('xyz', cm.Exception)
 
     ## -----------------------------------------------------------------------
@@ -48,13 +49,13 @@ class TestStringMethods(unittest.TestCase):
         a2 = {'d':'d', 'e':'e', 'f':'f'}
         a3 = {'g':'g', 'h':'h'}
 
-        argp.clear_namespace()
+        Argv().clear_namespace()
 
-        argp.set_namespace(a1)
-        argp.set_namespace(a2, reset=True)
-        argp.set_namespace(a3, reset=True)
+        Argv().set_namespace(a1)
+        Argv().set_namespace(a2, reset=True)
+        Argv().set_namespace(a3, reset=True)
 
-        got = argp.get_namespace()
+        got = Argv().get_namespace()
         self.assertDictEqual(got, a3)
 
     ## -----------------------------------------------------------------------
@@ -62,15 +63,15 @@ class TestStringMethods(unittest.TestCase):
     def test_argv(self):
         '''.'''
 
-        argp.clear_namespace()
+        Argv().clear_namespace()
 
-        got = argp.get_argv()
+        got = Argv().get_argv()
         # self.assertIsNone(got)
         self.assertFalse(got) # Expected None, coded return=={}
 
         exp = {'foo':'bar'}
-        argp.set_argv(exp)
-        got = argp.get_argv()
+        Argv().set_argv(exp)
+        got = Argv().get_argv()
         self.assertDictEqual(got, exp)
 
     ## -----------------------------------------------------------------------
@@ -78,14 +79,14 @@ class TestStringMethods(unittest.TestCase):
     def test_argv_exception(self):
         '''.'''
 
-        argp.clear_namespace()
+        Argv().clear_namespace()
 
         exp = {'a':'b', 'c':'d'}
-        argp.set_argv(exp)
+        Argv().set_argv(exp)
 
         inv = {'invalid':True}
         with self.assertRaises(Exception) as cm:
-            argp.set_argv(inv)
+            Argv().set_argv(inv)
             self.assertIn('xyz', cm.Exception)
 
 ##----------------##

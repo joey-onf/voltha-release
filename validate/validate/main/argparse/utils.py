@@ -17,8 +17,12 @@ import argparse
 import pprint
 
 from validate.main.utils   import iam
-from validate.main         import argparse_actions   as ar_ac
-from validate.main         import argparse_types     as ar_at
+from validate.main.argparse\
+    import actions as ar_ac
+from validate.main.argparse\
+    import types  as ar_at
+from validate.main.argparse.modes\
+    import Modes
 from validate.main.argparse.release\
     import Release
 
@@ -252,27 +256,6 @@ class Argv:
         
         Release().add_argument(parser)
 
-        parser.add_argument('--release-x',
-                            action  = 'store_true',
-                            default = False,
-                            help    = 'Enable strict checking for release.',
-                            )
-        parser.add_argument('--release-x-pre',
-                            action  = 'store_true',
-                            default = False,
-                            help    = 'Enable pre-release validation.',
-                            )
-        parser.add_argument('--release-x-post',
-                            action  = 'store_true',
-                            default = False,
-                            help    = 'Enable post-release validate.',
-                            )
-        parser.add_argument('--release-x-type',
-                            action  = 'store',
-                            default = None,
-                            help    = 'Name of project to validate',
-                            )
-
         ## -----------------------------------------------------------------------
         ## SECTION: Revision control
         ## -----------------------------------------------------------------------
@@ -318,47 +301,8 @@ class Argv:
         ## -----------------------------------------------------------------------
         ## SECTION: Program modes
         ## -----------------------------------------------------------------------
-        parser.add_argument('--debug',
-                            action  = 'store_true',
-                            default = False,
-                            help    = 'Enable script debug mode',
-                            )
+        Modes().add_argument(parser)
 
-        parser.add_argument('--debug-hack',
-                            action  = 'store_true',
-                            default = False,
-                            help    = 'Enable custom debugging',
-                            )
-        
-        parser.add_argument('--display',
-                            action  = 'append',
-                            default = [],
-                            # choices = ['gerrit', 'fileversion', 'branches', 'tags'],
-                            help    = 'Enable display attribute(s) mode.',
-                            )
-    
-        parser.add_argument('--todo',
-                            action  = ar_ac.opt_todo_action,
-                            help    = 'Display program enhancement list.',
-                            )
-        
-        parser.add_argument('--trace',
-                            action = 'store_true',
-                            help    = 'Resource names to trace during system probing',
-                            )
-        
-        parser.add_argument('--trace-all',
-                            action  = 'store_true',
-                            default = False,
-                            help    = 'Enable full time tracing for probes',
-                            )
-
-        parser.add_argument('--verbose',
-                            action  = 'store_true',
-                            default = False,
-                            help    = 'Enable script verbose mode',
-                            )
-        
         ## -----------------------------------------------------------------------
         ## SECTION: Program version - increment when script changes
         ## -----------------------------------------------------------------------
