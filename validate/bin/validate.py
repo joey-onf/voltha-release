@@ -25,10 +25,14 @@ if True: # Set searchpath early
     sys.path.insert(0, anchor)
 
 from validate.main.utils   import iam
-from validate.main         import argparse    as main_getopt
+from validate.main.argparse.utils\
+    import Argv
 
+from validate.main.file_utils\
+    import pushd, traverse
 from validate.main         import file_utils
 
+from validate.release.utils import Pre, Post
 from validate.versions     import check_by
 
 from validate.versions     import versions
@@ -45,6 +49,9 @@ from validate.repository.sandbox\
     import Sbx
 from validate.checkup.check_version_file\
     import ByFile
+
+from validate.display.utils\
+    import Branches, FileVersion, GerritUrls, Tags
 
 ## ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
@@ -68,7 +75,7 @@ def get_repo_names\
     ..note: return all repository names unless project or component
 
     '''
-    argv  = main_getopt.get_argv()
+    argv = Argv().get_argv()
 
     keys = []
     if project:
@@ -94,6 +101,24 @@ def get_repo_names\
 
 ## ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
+def display_sandbox_attributes():
+    '''Display per-repository attributes (transfer to wiki)'''
+
+    argv = Argv().get_argv()
+    
+    if 'gerriturls' in argv['display']:
+        GerritUrls().display()
+    if 'fileversion' in argv['display']:
+        FileVersion().display()
+    if 'branches' in argv['display']:
+        Branches().display()
+    if 'tags' in argv['display']:
+        Tags().display()
+
+    return
+
+## ---------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 def process():
     '''Process commmand line arguments:
          o Itearate and checkout all repositories.
@@ -103,8 +128,9 @@ def process():
              - component repo(s): git tags
     '''
 
-    argv = main_getopt.get_argv()
-
+    argv = Argv().get_argv()
+    # Pre().is_valid()
+    
     # NOTE: line continuation use
     #   o Improves readability.
     #   o breakpoints: avoid stepping into constructor.
@@ -115,7 +141,16 @@ def process():
     repo_names = repo_utils.Names().get()
     repo_utils.Rcs(debug=True)\
         .get_repos(repo_names)
- 
+
+    ## ---------------------------
+    ## Display attributes,versions
+    ## ---------------------------
+    if len(argv['display']) > 0:
+        display_sandbox_attributes()
+    
+    ## ---------------------------
+    ## Validate
+    ## ---------------------------
     branch     = argv['branch']
     tag        = argv['tag']
 
@@ -135,10 +170,12 @@ def process():
     print('** Repository type: project')
 
     sandbox = Sbx().get_sandbox()
-    import pdb
 
+    pre = Pre()
+    if not pre.is_valid():
+        errors += pre.get_error()
+    
     ## Verify VERSION file contents.
-    pdb.set_trace()
     ByFile().version_file(sandbox)
     
     ## Verify[branch]: voltha-2.11
@@ -164,6 +201,10 @@ def process():
         else:
             errors += ['\n'.join(['', err, '', msg, ''])]
 
+    post = Post()
+    if not post.is_valid():
+        errors += post.get_error()
+            
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 # def check_VERSION_required(debug:bool=None):
@@ -206,7 +247,7 @@ def check_VERSION(debug:bool=None):
     # VERSION file object with methods
     # -----------------------------------------------
     errors = []
-    fyls = file_utils.traverse(root='sandbox', incl=['VERSION'])
+    fyls = traverse(root='sandbox', incl=['VERSION'])
     for fyl in fyls:
 
         ver_ver = versions.Ver()
@@ -236,14 +277,18 @@ def check_VERSION(debug:bool=None):
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 def init(argv_raw) -> None:
-    '''Prep for a script run
-         o Verify composite required arguments passed.
+    '''Prep for a script run:
+         o Set umask
+         o Derive values from command line args.
 
     '''
 
+    os.umask(0o077)
+
     ## Move to class validate/main/utils.py
-    main_getopt.getopts(argv_raw)
-    argv = main_getopt.get_argv()
+#     Argv().arg_opts(argv_raw)
+    Argv().arg_opts()
+    argv = Argv().get_argv()
 
     project = argv['project']
     version = argv['ver']
@@ -273,16 +318,15 @@ def main(argv_raw):
     start = Path('.').resolve().as_posix()
 
     init(argv_raw)
-    argv = main_getopt.get_argv()
+    argv = Argv().get_argv()
     if argv['verbose']:
         pprint.pprint(argv)
 
     # tempdir() or sandbox
     work = argv['sandbox'] if argv['sandbox'] else None
-    print(" ** WORK: %s" % work)
 
     # Persistent or transient (?)
-    with file_utils.pushd(path=work) as sandbox:
+    with pushd(path=work) as sandbox:
         Sbx().set_sandbox()
         process()
 
@@ -291,7 +335,7 @@ def main(argv_raw):
             distutils.dir_util.copy_tree('.', argv['archive'])
 
     os.chdir(start)
-    print("ALL DONE")
+    print('\n' + 'ALL DONE')
 
 ##----------------##
 ##---]  MAIN  [---##
