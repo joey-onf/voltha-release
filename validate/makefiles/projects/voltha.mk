@@ -37,6 +37,17 @@ voltha-args += --ver $(VER)
 voltha-args += --branch $(PRJ)-$(VER)
 voltha-args += --tag $(VER)
 
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+display-type += branch
+display-type += chart
+display-type += fileversion
+display-type += gerriturl
+display-type += tag
+$(if $(display-type)\
+   ,$(eval voltha-args += $(addprefix --display$(space),$(display-type)))\
+  ,$(info [SKIP] --display-type))
+
 # release-type := full
 # release-type := point
 # release-type := patch
@@ -100,6 +111,13 @@ voltha-repos += voltha-bal
 # https://docs.voltha.org/master/release_notes/voltha_2.10.html#openolt-agent-packages
 
 voltha-args += $(call add-repo,voltha-repos)
+
+
+# https://docs.voltha.org/master/overview/release_process.html?highlight=charts%20yaml#onos-apps
+voltha-repos-misc += onos-app
+voltha-args += $(call add-repo,voltha-repos-misc)
+
+
 
 ## [git clone]
 ## -----------------------------------------------------------------------

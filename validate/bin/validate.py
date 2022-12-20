@@ -30,7 +30,12 @@ from validate.main.argparse.utils\
 
 from validate.main.file_utils\
     import pushd, traverse
-from validate.main         import file_utils
+# from validate.main         import file_utils
+
+from validate.display.utils\
+    import Display
+
+
 
 from validate.release.utils import Pre, Post
 from validate.versions     import check_by
@@ -51,7 +56,7 @@ from validate.checkup.check_version_file\
     import ByFile
 
 from validate.display.utils\
-    import Branches, FileVersion, GerritUrls, Tags
+    import Branches, Chart, FileVersion, GerritUrls, Tags
 
 ## ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
@@ -101,7 +106,7 @@ def get_repo_names\
 
 ## ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
-def display_sandbox_attributes():
+def display_sandbox_attributes_orig():
     '''Display per-repository attributes (transfer to wiki)'''
 
     argv = Argv().get_argv()
@@ -114,6 +119,8 @@ def display_sandbox_attributes():
         Branches().display()
     if 'tags' in argv['display']:
         Tags().display()
+    if 'chart' in argv['display']:
+        Chart().display()
 
     return
 
@@ -146,8 +153,8 @@ def process():
     ## Display attributes,versions
     ## ---------------------------
     if len(argv['display']) > 0:
-        display_sandbox_attributes()
-    
+        Display().display_sandbox_attributes()
+
     ## ---------------------------
     ## Validate
     ## ---------------------------
