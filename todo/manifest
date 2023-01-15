@@ -1,0 +1,30 @@
+https://jenkins.opencord.org/view/Community-PODs/job/build_berlin-community-pod-2-gpon-zyxel_1T8GEM_voltha_DT_master_test/181/consoleFull
+
+
+
+[2022-11-21T09:40:30.379Z] [manifests] $ git rev-parse HEAD
+[2022-11-21T09:40:31.203Z] Added a project: bbsim at revision: 93ffa2ec5383520708723f344f0d610e57db0c39
+[2022-11-21T09:40:31.203Z] Added a project: cordctl at revision: 24f57ea00ebe2344f3cca4d1735abb2c074956a5
+[2022-11-21T09:40:31.203Z] Added a project: kafka-topic-exporter at revision: c71914fa06d34bef2a40efb7443b7bdf2fcabd9e
+[2022-11-21T09:40:31.203Z] Added a project: kind-voltha at revision: 384c81649f2ddabcf9cb51c6bf625042f021b658
+[2022-11-21T09:40:31.203Z] Added a project: ofagent-go at revision: 42dacd6b4589f5df60c19d4a04e6c0bb438f32ba
+[2022-11-21T09:40:31.203Z] Added a project: ofagent-py at revision: 2bf11749e2b6d03414b5e170101f07fde0235e49
+[2022-11-21T09:40:31.203Z] Added a project: omci-sim at revision: 1dee81237f6c7d1b63867ed0f9afcf4fc03de539
+[2022-11-21T09:40:31.203Z] Added a project: pyvoltha at revision: 01051008440a109e2014072b81215a3464a4e445
+[2022-11-21T09:40:31.203Z] Added a project: sadis-server at revision: 11794a31fd93a07d5ea0a06fd0a1213419e79b73
+[2022-11-21T09:40:31.203Z] Added a project: voltctl at revision: 3ed5bdee751022dafd7ae1549ea09666cc49eb6f
+[2022-11-21T09:40:31.203Z] Added a project: voltha-api-server at revision: 4322d61d804bf45579fb7bc4405637f45ef82914
+[2022-11-21T09:40:31.203Z] Added a project: voltha-bbsim at revision: 143dad569eef1e883f3aec963854a40d345fec04
+[2022-11-21T09:40:31.203Z] Added a project: voltha-go at revision: fd441170cd2c086630ad190e1612d7f22a1ac8f6
+[2022-11-21T09:40:31.203Z] Added a project: voltha-helm-charts at revision: c02931b0978b4339b5766f09844e99a3ffd602f5
+[2022-11-21T09:40:31.203Z] Added a project: voltha-lib-go at revision: 6ab2a9885a9bc88c16266df12d44136242c3c122
+[2022-11-21T09:40:31.203Z] Added a project: voltha-onos at revision: 460edf0b797795251b3a1a9073644943a7af3997
+[2022-11-21T09:40:31.203Z] Added a project: voltha-openolt-adapter at revision: e333d154ee39f65461ff2fcaf410cd74f5f3ab69
+[2022-11-21T09:40:31.203Z] Added a project: voltha-openonu-adapter at revision: 16d9a4de20f4b377a6bb746e9f8808c70e054f25
+[2022-11-21T09:40:31.203Z] Added a project: voltha-openonu-adapter-go at revision: 68854a8bbeac073f1652871f7398caa426292e09
+[2022-11-21T09:40:31.203Z] Added a project: voltha-protos at revision: 3374b88d6433fcb991314b98ef2c5c0994b94a2d
+[2022-11-21T09:40:31.203Z] Added a project: voltha-simolt-adapter at revision: a14c6353ec0ca850e25a187f19ec0476592f9495
+[2022-11-21T09:40:31.203Z] Added a project: voltha-simonu-adapter at revision: 06a6384baa78d45c23cb790661136b3dd5c192ae
+[2022-11-21T09:40:31.203Z] Added a project: voltha-system-tests at revision: 3abc187eeea2b732f698272d444c2a04dcc6197a
+[2022-11-21T09:40:31.203Z] Manifest at revision: c787165bb4809956dce94ad982e55eb6b7f09213
+

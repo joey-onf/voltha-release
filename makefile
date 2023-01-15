@@ -13,6 +13,7 @@ TOP         ?= .
 MAKEDIR     ?= $(TOP)/makefiles
 
 include $(MAKEDIR)/consts.mk
+SHELL := /bin/bash -eu
 include $(MAKEDIR)/repos.mk
 include $(MAKEDIR)/commands/include.mk
 

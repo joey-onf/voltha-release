@@ -8,14 +8,14 @@
 ##-------------------##
 import pprint
 
-from probe.main        import utils           as main_utils
-from probe.main        import argparse        as main_getopt
+from validate.main.argparse.utils\
+    import Argv
 
 ## ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
 def process():
     '''.'''
 
-    argv  = main_getopt.get_argv()
+    argv  = Argv().get_argv()
         
 # [EOF]

@@ -1,0 +1,70 @@
+
+Jira stories
+
+A full list of stories and bugs completed can be found under the VOLTHA 2.10 release page in Jira.
+Component Versions in VOLTHA 2.10 release
+ONOS and Atomix:
+
+    ONOS 2.5 LTS: 2.5.8
+
+    ATOMIX: 3.1.9
+
+ONOS Apps:
+
+    aaa: 2.6.0
+
+    dhcpl2relay: 2.6.0
+
+    igmpproxy: 2.5.0
+
+    kafka: 2.9.0
+
+    mcast: 2.6.0
+
+    olt: 5.1.2
+
+    sadis: 5.6.0
+
+    bng: 2.2.0
+
+    pppoeagent: 1.2.0
+
+    olttopology: 1.2.0
+
+VOLTHA Components:
+
+    Helm Charts (voltha-helm-charts) - 3.1.4
+
+    bbsim- 1.12.10 with chart 4.8.6
+
+    voltha-go - 3.1.5 with chart 2.11.3
+
+    ofagent-go - 2.1.2 with chart 2.11.3
+
+    voltctl - 1.7.6
+
+    voltha-openolt-adapter - 4.2.6 with chart 2.11.3
+
+    voltha-openonu-adapter-go - 2.2.8 with chart 2.10.3
+
+    voltha-onos - 5.1.1 with chart 0.1.27
+
+    openolt agent - 3.7.5
+
+    voltha-protos - 5.2.5
+
+    voltha-lib-go - 7.1.7
+
+    Bbsim-sadis-server - 0.3.4 with chart 0.3.1
+
+    voltha-system-tests - 2.10.1
+
+Helm Chart Versions:
+
+This section refers to the macro charts to deploy the required infrastructure and a (or many) VOLTHA stacks: - Voltha-infra: 2.10.7 - Voltha-stack: 2.10.5
+BAL Version:
+
+Broadcom abstraction layer (BAL) version: 3.10.2.2.
+Openolt Agent packages:
+
+EdgeCore Get access credentials for https://edgecore.quickconnect.to from Edgecore. Then login and navigate to File_Station -> EdgecoreNAS, and then the folder /ASXvOLT16/OpenOLT_Agent/From_ONF_Distribution/voltha-2.10 or /ASGvOLT64/OpenOLT_Agent/From_ONF_Distribution/voltha-2.10 based on ASXvOLT16 or ASGvOLT64 platform, and pick the suitable OLT debian package based on BAL 3.10.2.2 applicable for you. Please make sure to use the ONL /ASXvOLT16/OpenOLT_Agent/From_ONF_Distribution/ONL-onl-4.14_ONL-OS8_2021-11-26.0058-0de1c30_AMD64_INSTALLED_INSTALLER for running BAL 3.10.2.2.

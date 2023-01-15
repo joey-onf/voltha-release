@@ -10,7 +10,8 @@
 ##-------------------##
 ##---]  IMPORTS  [---##
 ##-------------------##
-from validate.main.utils   import iam
+from validate.main.utils\
+    import iam
 
 ## -----------------------------------------------------------------------
 ## Intent:
@@ -23,22 +24,24 @@ class Release():
     ## -----------------------------------------------------------------------
     def add_argument(self, parser):
 
-        parser.add_argument('--release',
+        release = parser.add_argument_group('[RELEASE]')
+
+        release.add_argument('--release',
                             action  = 'store_true',
                             default = False,
                             help    = 'Enable strict checking for release.',
                             )
-        parser.add_argument('--release-pre',
+        release.add_argument('--release-pre',
                             action  = 'store_true',
                             default = False,
                             help    = 'Enable pre-release validation.',
                             )
-        parser.add_argument('--release-post',
+        release.add_argument('--release-post',
                             action  = 'store_true',
                             default = False,
                             help    = 'Enable post-release validate.',
                             )
-        parser.add_argument('--release-type',
+        release.add_argument('--release-type',
                             action  = 'store',
                             default = None,
                             help    = 'Name of project to validate',
@@ -50,7 +53,9 @@ class Release():
         '''Display module usage statement.'''
 
         print('''
-from validate.main.argparse.release import Release
+from validate.main.argparse.release\
+    import Release
+
 Release().usage()
 ''')
 

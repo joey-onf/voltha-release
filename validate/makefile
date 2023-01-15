@@ -8,8 +8,6 @@
 ##---]  GLOBALS  [---##
 ##-------------------##
 
-# null 	    :=#
-# space	    :=$(null) $(null)
 ONF_TOP	    ?= ..
 ONF_MAKE    ?= $(ONF_TOP)/makefiles
 
@@ -49,6 +47,15 @@ main-args := $(null)
 
 # main-args += --debug
 main-args += --trace
+
+## Reporting switches
+# main-args += --no-go-mod
+main-args += --no-display-chart-deps
+main-args += --no-display-chart-version
+main-args += --no-display-version-file-delta
+main-args += --no-gerrit-urls
+main-args += --no-branch-by-repo
+main-args += --no-tag-by-repo
 # main-args += --verbose
 
 # main-args += --repo voltha-system-tests
@@ -143,6 +150,7 @@ clean ::
 ## -----------------------------------------------------------------------
 sterile :: clean
 	$(RM) -r /tmp/tmp*
+	$(RM) -r /var/tmp/sandbox
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------

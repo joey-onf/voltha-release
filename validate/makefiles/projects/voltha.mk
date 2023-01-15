@@ -76,6 +76,7 @@ voltha-args += $(call add-component,voltha-test)
 voltha-tools := $(null)
 voltha-tools += bbsim
 voltha-tools += voltctl
+voltha-tools += helm-repo-tools
 voltha-args += $(call add-component,voltha-tools)
 
 voltha-onos := $(null)
@@ -86,7 +87,9 @@ voltha-onos += igmpproxy
 voltha-onos += mcast
 voltha-onos += olt
 voltha-onos += sadis
-voltha-onos += mac-learning
+voltha-onos += mac-learning# maclearner
+# voltha-onos += onos#                              # valid or an alias ?
+# voltha-onos += onos-app-release#                  #
 voltha-args += $(call add-component,voltha-onos)
 
 voltha-libs := $(null)
@@ -169,10 +172,12 @@ repo-onos += aaa
 repo-onos += dhcpl2relay
 repo-onos += igmpproxy
 # repo-onos += kafka
+repo-onos += kafka-onos
 repo-onos += mac-learning
 repo-onos += mcast
 repo-onos += olt
 repo-onos += sadis
+repo-onos += bng#   needed ?
 repos += $(repo-onos)
 
 repo-libs += voltha-lib-go
@@ -185,6 +190,9 @@ repo-containers += voltha-openolt-adapter
 repo-containers += voltha-openonu-adapter-go
 repo-containers += voltha-onos#  (includes ONOS Apps)
 repos += $(repo-containers)
+
+repos += olttopology
+
 
 voltha-args += $(addprefix --repo$(space),$(repos))
 

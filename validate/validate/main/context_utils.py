@@ -11,8 +11,8 @@ from contextlib        import ContextDecorator
 
 import time
 
-from validate.main.utils\
-                       import iam
+from validate.main import utils as main_utils
+#     import iam, banner
 
 
 ## -----------------------------------------------------------------------
@@ -29,13 +29,13 @@ class elapsed_time(ContextDecorator):
     def __init__(self, banner:str, debug:bool=None):
         '''.'''
 
-        self.iam = iam(frame=2) # parent
+        self.iam = main_utils.iam(frame=2) # parent
 
         if debug is None:
             debug = False
         self.debug = debug
 
-        print(banner)
+        main_utils.banner(banner, pre=True)
         if debug:
             print('')
             print('** %s: ENTER' % iam)

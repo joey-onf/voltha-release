@@ -20,8 +20,10 @@ import validators
 import git
 from git               import Repo
 
-from validate.main.utils  import iam
-from validate.main     import argparse        as main_getopt
+from validate.main.utils\
+    import banner, iam
+from validate.main.argparse.utils\
+    import Argv
 from validate.main     import file_utils
 
 from validate.repository.sandbox  import Sbx
@@ -83,7 +85,7 @@ class Names:
         
         '''
 
-        argv  = main_getopt.get_argv()
+        argv  = Argv().get_argv()
 
         keys = []
         if project:
@@ -259,6 +261,8 @@ class Rcs:
             debug = self.debug
         if debug is None:
             debug = False
+
+        banner('Repository Checkout')
 
         errors = []
         repos = list(set(repos))

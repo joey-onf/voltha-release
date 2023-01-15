@@ -18,8 +18,10 @@ from semver                import compare, VersionInfo
 import git
 from git                   import Repo
 
-from validate.main         import utils           as main_utils
-from validate.main         import argparse        as main_getopt
+from validate.main.utils      import iam
+from validate.main.argparse.utils\
+    import Argv
+
 from validate.main         import file_utils
 
 from validate.repository   import release
@@ -138,7 +140,7 @@ class By:
         self.trace_mode()
         self.clear_error()
         
-        argv    = main_getopt.get_argv()
+        argv    = Argv().get_argv()
         version = argv['branch']
  
         errors = []
@@ -161,7 +163,7 @@ class By:
         self.trace_mode()
         self.clear_error()
 
-        argv    = main_getopt.get_argv()
+        argv    = Argv().get_argv()
         version = argv['tag']
 
         errors = []
@@ -181,13 +183,13 @@ class By:
     def check_version_tag_orig(self, path:str):
         '''Validate VERSION file contents.'''
 
-        argv  = main_getopt.get_argv()
+        argv  = Argv().get_argv()
         skip = ['pod-configs']
 
         # lazy_branch = semver.compare(argv['ver'], '2.11.0')
         # chlazy_branch = compare(argv['ver'], '2.11.0')
  
-        argv  = main_getopt.get_argv()
+        argv  = Argv().get_argv()
         for name in argv['repo_component']:
             if name in skip:
                 continue

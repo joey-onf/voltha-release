@@ -11,7 +11,7 @@ import pprint
 from random               import randrange
 
 from pathlib              import Path
-from urllib.parse         import urlparse, urljoin
+# from urllib.parse         import urlparse, urljoin
 
 import git
 from git                  import Repo
@@ -118,5 +118,18 @@ class Sbx:
             ]
 
         return tags
+        
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
+    def get_file_version(self) -> str:
+
+        repo = self.get_repo()
+        pprint.pprint(type(repo))
+        import pdb
+        pdb.set_trace()
+
+        # path = self.get_sandbox(repo_name)
+        xy = 1
+        
         
 # [EOF]

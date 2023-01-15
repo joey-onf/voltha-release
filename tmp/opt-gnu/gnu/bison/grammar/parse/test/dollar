@@ -1,0 +1,22 @@
+'$'                 err: not dollar token
+$1                  type: varname
+$a                  type: varname
+$(abc)              type: varname de-reference
+$($(abc))           type: indirect expansion
+$$(abc)             type: indirect expansion
+$($abc)             err: invalid syntax
+$$abc               err: invalid syntax
+
+$($($(abc)))
+$($(abc)-$(def))
+$( ( abc ) )        # TEST: makefile - $(info string evaluation), compare as expected
+  dollar-vars/posix.mk
+  dollar-vars/gnu.mk
+  dollar-vars/nmake.mk
+  dollar-vars/bsd.mk
+  dollar-vars/netbsd.mk
+  dollar-vars/openbsd.mk
+
+# [ERRORS]
+$($($(abc))
+$($(abc)-$()def))

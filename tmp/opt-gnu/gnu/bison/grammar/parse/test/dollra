@@ -1,0 +1,8 @@
+'$'                 err: not dollar token
+$1                  type: varname
+$a                  type: varname
+$(abc)              type: varname de-reference
+$($(abc))           type: indirect expansion
+$$(abc)             type: indirect expansion
+$($abc)             err: invalid syntax
+$$abc               err: invalid syntax

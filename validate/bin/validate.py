@@ -30,20 +30,20 @@ from validate.main.argparse.utils\
 
 from validate.main.file_utils\
     import pushd, traverse
-# from validate.main         import file_utils
+from validate.main         import file_utils
 
 from validate.display.utils\
     import Display
 
-
-
-from validate.release.utils import Pre, Post
+from validate.release.utils\
+    import GoMod, Pre, Post
 from validate.versions     import check_by
 
 from validate.versions     import versions
 
 from validate.proto        import myyaml
-from validate.proto        import utils           as proto
+from validate.proto        import utils\
+    as proto
 
 from validate.main.context_utils\
     import elapsed_time
@@ -54,10 +54,31 @@ from validate.repository.sandbox\
     import Sbx
 from validate.checkup.check_version_file\
     import ByFile
+from validate.components import utils as comp_utils
 
 from validate.display.utils\
     import Branches, Chart, FileVersion, GerritUrls, Tags
 
+from validate.pom_xml.utils import Extract
+
+## ---------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
+def do_pom_xml():
+
+    fyls = traverse(root='/var/tmp/sandbox', incl=['pom.xml'])
+    for fyl in fyls:
+        if not 'aaa' in fyl:
+            continue
+        Extract(fyl).version(fyl)
+
+    if False:
+        import pdb
+        pdb.set_trace()
+        
+    xyz = 1
+    return
+
+        
 ## ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
 def get_repo_names\
@@ -106,26 +127,6 @@ def get_repo_names\
 
 ## ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
-def display_sandbox_attributes_orig():
-    '''Display per-repository attributes (transfer to wiki)'''
-
-    argv = Argv().get_argv()
-    
-    if 'gerriturls' in argv['display']:
-        GerritUrls().display()
-    if 'fileversion' in argv['display']:
-        FileVersion().display()
-    if 'branches' in argv['display']:
-        Branches().display()
-    if 'tags' in argv['display']:
-        Tags().display()
-    if 'chart' in argv['display']:
-        Chart().display()
-
-    return
-
-## ---------------------------------------------------------------------------
-## ---------------------------------------------------------------------------
 def process():
     '''Process commmand line arguments:
          o Itearate and checkout all repositories.
@@ -155,6 +156,8 @@ def process():
     if len(argv['display']) > 0:
         Display().display_sandbox_attributes()
 
+    do_pom_xml()
+
     ## ---------------------------
     ## Validate
     ## ---------------------------
@@ -178,6 +181,8 @@ def process():
 
     sandbox = Sbx().get_sandbox()
 
+    comp_utils.ByFile().gather(path=sandbox)
+    
     pre = Pre()
     if not pre.is_valid():
         errors += pre.get_error()
@@ -208,6 +213,8 @@ def process():
         else:
             errors += ['\n'.join(['', err, '', msg, ''])]
 
+    GoMod().verify(sandbox)
+
     post = Post()
     if not post.is_valid():
         errors += post.get_error()
@@ -235,8 +242,16 @@ def process():
 ## -----------------------------------------------------------------------
 def check_VERSION(debug:bool=None):
 
+    ## Is this still being used ?
+
+    print("** IS THIS STILL USED (check_VERSION) called")
+
+    import pdb
+    pdb.set_trace()
+    
     if debug is None:
         debug = False
+
     debug = True
 
     required=\

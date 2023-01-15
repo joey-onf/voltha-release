@@ -1,0 +1,31 @@
+https://docs.voltha.org/master/overview/release_process.html?highlight=charts%20yaml#creating-the-release
+
+
+
+    VOLTHA Helm Charts
+
+    VOLTHA System Tests
+
+    VOLTHA docs
+
+These 3 repos are the only ones that receive a X.Y.Z tag. Other repos that contain individual components have their own versioning/release cadence, driven by SemVer.
+
+
+
+Helm Charts
+
+The official action of creating the voltha-X.Y release is releasing the voltha helm chart, and adapter charts with version:X.Y.Z (e.g. 2.10.0) specified in Chart.yaml within the voltha-helm-charts repo, and within the VERSION file in that repo. A branch named voltha-X.Y needs to be created on the voltha-helm-charts repo. The helm charts repo overall VERSION should also be incremented to the next minor version (X.Y+1-dev), so all X.Y.Z releases of the overall charts repo will happen on the voltha-X.Y branch.
+
+voltha-helm-charts: branch voltha-2.10.0
+  VERSION: X.Y+1-dev
+
+
+Accompanying tests for voltha-X.Y are created by creating a branch created named voltha-X.Y on the voltha-system-tests repo and creating a tag X.Y.Z on that branch.
+
+
+
+Documentation and Release Notes
+
+Release notes for the voltha-X.Y release are created and added to the voltha-docs repo. Please follow the template of past releases, an example
+
+Also, if needed a voltha-X.Y branch is created on docs repo. These release notes also contain all the versions of components that will be released, and may be updated during the final QA process. At release we create a tag X.Y.Z in the VERSION file.

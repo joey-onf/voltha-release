@@ -37,8 +37,8 @@ def banner(label, *args, pre=None, post=None) -> None:
         print('')
 
     hyphens = '-' * 71
-    print(" ** %s" % hyphens)
-    print(" ** %s" % label)
+    print("** %s" % hyphens)
+    print("** %s" % label)
 
     for arg in args:
         if isinstance(arg, dict):
@@ -47,11 +47,11 @@ def banner(label, *args, pre=None, post=None) -> None:
             todo = arg
             # todo = list_utils.flatten(arg)
             for line in todo:
-                print(" ** %s" % line)
+                print("** %s" % line)
         else:
-            print(" ** %s" % arg)
+            print("** %s" % arg)
 
-    print(" ** %s" % hyphens)
+    print("** %s" % hyphens)
 
     if post:
         print('')

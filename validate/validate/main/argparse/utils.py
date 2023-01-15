@@ -21,10 +21,16 @@ from validate.main.argparse\
     import actions as ar_ac
 from validate.main.argparse\
     import types  as ar_at
+from validate.main.argparse.filters\
+    import Filters
 from validate.main.argparse.modes\
     import Modes
 from validate.main.argparse.release\
     import Release
+from validate.main.argparse.reporting\
+    import Reporting
+from validate.main.argparse.version_control\
+    import Vcs
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -43,7 +49,7 @@ class Argv:
         """
         
         global ARGV
-        
+       
         if ARGV is None:
             self.set_argv(None, reset=True)
             
@@ -87,10 +93,11 @@ class Argv:
         for arg in vars(cache):
             arg_dict[arg] = getattr(cache, arg)
 
-        import pdb
-        pdb.set_trace()
-        ## Why is this defaulting to true ?
-        argv['release'] = False
+        if argv['release']:
+            import pdb
+            pdb.set_trace()
+            print("** [TODO] Why is this defaulting to true ?")
+            argv['release'] = False
 
         ARGV = arg_dict
 
@@ -220,70 +227,11 @@ class Argv:
         parser = argparse.ArgumentParser\
             (
                 description = 'A program for validating VOLTHA release content.',
-                epilog=\
-'''
-'''
+                # epilog=''
             )
-        
-        ## -----------------------------------------------------------------------
-        ## SECTION: Release repositories
-        ## -----------------------------------------------------------------------
-        parser.add_argument('--repo-project',
-                            action  = 'append',
-                            required = True,
-                            default = [
-                                'voltha-helm-charts',
-                                'voltha-system-tests',
-                            ],
-                            help    = 'Name of project repositories',
-                            )
-        
-        parser.add_argument('--repo-component',
-                            action  = 'append',
-                            default = [],
-                            help    = 'Name of project components',
-                            )
-        
-        ## -----------------------------------------------------------------------
-        ## SECTION: VOLTHA modes
-        ## -----------------------------------------------------------------------
-        parser.add_argument('--project',
-                            action  = 'store',
-                            # required = True,
-                            default = 'voltha',
-                            help    = 'Name of project to validate',
-                            )
-        
-        Release().add_argument(parser)
 
-        ## -----------------------------------------------------------------------
-        ## SECTION: Revision control
-        ## -----------------------------------------------------------------------
-        parser.add_argument('--ver',
-                            action  = 'store',
-                            type    = ar_at.valid_version,
-                            help    = 'Package version to valiate (branch, tag, components, charts)',
-                            )
+        Filters().add_argument(parser)
         
-        # TODO: infer from {project}-{ver}
-        parser.add_argument('--branch',
-                            action  = 'store',
-                            # type    = ar_at.valid_version,
-                            help    = 'Expected release branch name/version',
-                            )
-
-        parser.add_argument('--tag',
-                            action  = 'store',
-                            type    = ar_at.valid_version,
-                            help    = 'Expected release tag name/version',
-                            )
-
-        parser.add_argument('--repo',
-                            action  = 'append',
-                            default = [],
-                            help    = 'A list of repositories to include in the release.',
-                            )
-
         ## -----------------------------------------------------------------------
         ## SECTION: Archive temp sandbox when finished
         ## -----------------------------------------------------------------------
@@ -297,18 +245,18 @@ class Argv:
                             type    = ar_ac.valid_directory_exists,
                             help    = 'Directory holding revision control checkouts.',
                             )
-        
-        ## -----------------------------------------------------------------------
-        ## SECTION: Program modes
-        ## -----------------------------------------------------------------------
-        Modes().add_argument(parser)
 
         ## -----------------------------------------------------------------------
-        ## SECTION: Program version - increment when script changes
+        ## SECTION(s)
         ## -----------------------------------------------------------------------
-        parser.add_argument('--version', action='version', version='%(prog)s 0.1')
+        Release().add_argument(parser)
+        Vcs().add_argument(parser)
+        Reporting().add_argument(parser)
+        Modes().add_argument(parser)
+        parser.add_argument('--version', action='version', version='%(prog)s 1.0')
         
         namespace = parser.parse_args()
+        Reporting().finalize(namespace)
         self.set_argv(namespace, reset=True)
         
         return

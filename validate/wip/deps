@@ -1,0 +1,31 @@
+1) Release voltha-proto
+2) Update voltha-lib-go and release
+3) Change protos and lib-go versions in components (go.mod).
+4) make mod-update
+5) Relase the component.
+
+## RELEASE
+https://github.com/opencord/voltha-go
+https://github.com/opencord/ofagent-go
+https://github.com/opencord/voltha-openonu-adapter-go
+https://github.com/opencord/voltha-openolt-adapter
+https://github.com/opencord/openolt
+
+https://github.com/opencord/bbsim
+https://github.com/opencord/bbsim-sadis-server
+
+# Libs and APIs
+https://github.com/opencord/voltha-protos
+https://github.com/opencord/voltha-lib-go
+https://github.com/opencord/omci-lib-go
+
+# Tools
+https://github.com/opencord/voltctl
+
+# Configs
+https://github.com/opencord/pod-configs
+
+
+## Release after all others are
+https://github.com/opencord/voltha-onos
+

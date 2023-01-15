@@ -1,0 +1,14 @@
+# -*- makefile -*-
+
+https://gerrit.opencord.org/pod-configs
+https://api.github.com/repos/opencord/voltctl/releases/latest
+https://gerrit.opencord.org/plugins/gitiles/voltha-test-manifest
+
+https://gerrit.opencord.org/plugins/gitiles/voltha-system-tests/+/refs/heads/master
+https://gerrit.opencord.org/plugins/gitiles/ci-management
+https://gerrit.opencord.org/voltha-helm-charts
+
+
+
+
+# [EOF]

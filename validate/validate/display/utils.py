@@ -40,6 +40,10 @@ class Branches():
     def display(self):
         '''Display repository branch information.'''
 
+        argv  = Argv().get_argv()
+        if not argv['branch_by_repo']:
+            return True
+        
         banner('Latest git branch by repo', pre=True)
         repo_names = Sbx().get_repo_names()
 
@@ -89,12 +93,20 @@ class Chart():
                 val = dict([(key, rec[key]) for key in ['name', 'version']])
                 ans += [val]
 
+                # sbx = Sbx(repo_name=rec['name']).get_file_version()
+                # branches = Sbx(repo_name=repo_name).get_branches()
+                
         return ans
 
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def display_deps(self, debug:bool=None):
         ''' . '''
+
+        argv  = Argv().get_argv()
+        if not argv['display_chart_deps']:
+            return True
+        
         if debug is None:
             debug = False
 
@@ -112,7 +124,7 @@ class Chart():
         for repo_name in sorted(buff.keys()):
             if len(buff[repo_name]) == 0:
                 continue
-            print('\n  [%s]' % repo_name)
+            print('\n  [CHART] %s' % repo_name)
             for rec in buff[repo_name]:
                 print('  %-60.60s %s' % (rec['name'], rec['version']))
                 
@@ -125,6 +137,10 @@ class Chart():
         :type  verbose: bool
         '''
 
+        argv  = Argv().get_argv()
+        if not argv['display_chart_version']:
+            return True
+        
         if verbose is None:
             verbose = False
 
@@ -169,6 +185,10 @@ class FileVersion():
     def display(self):
         '''Gather VERSION files and display contents.'''
 
+        argv  = Argv().get_argv()
+        if not argv['display_version_file_delta']:
+            return True
+        
         banner('Version by VERSION file', pre=True)
 
         buff = {}
@@ -197,6 +217,10 @@ class Tags():
     ## -----------------------------------------------------------------------
     def display(self):
         '''Display repository tag information.'''
+
+        argv  = Argv().get_argv()
+        if not argv['tag_by_repo']:
+            return True
 
         banner('Latest git tag by repo', pre=True)
         repo_names = Sbx().get_repo_names()
@@ -229,6 +253,10 @@ class GerritUrls():
     ## -----------------------------------------------------------------------
     def display(self):
         '''Gather VERSION files and display contents.'''
+
+        argv  = Argv().get_argv()
+        if not argv['gerrit_urls']:
+            return True
 
         banner('Gerrit URLS', pre=True)
 

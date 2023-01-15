@@ -12,11 +12,15 @@ import pprint
 from pathlib           import PurePath
 
 import git
-from git               import Repo
+# from git               import Repo
 
 from validate.main     import utils           as main_utils
-from validate.main     import argparse        as main_getopt
+from validate.main.argparse.utils\
+    import Argv
 from validate.main     import file_utils
+
+# from validate.repository.utils    import MyRepo
+from validate.repository.sandbox    import Sbx
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -72,7 +76,9 @@ class Branches:
         :rtype : list[str]
         '''
 
-        repo     = Repo(repo_name)
+        # repo = MyRepo().get_repo(repo_name)
+        repo = Sbx(repo_name=repo_name).get_repo()
+        # repo     = Repo(repo_name)
         branches=\
             [
                 ref.name
@@ -94,7 +100,7 @@ class Branches:
         :rtype : list[str]
         '''
 
-        argv     = main_getopt.get_argv()
+        argv     = Argv().get_argv()
         prefix   = argv['project']
         debug    = False # argv['debug']
 
@@ -202,7 +208,7 @@ class Tags:
         :rtype : list[str]
         '''
 
-        argv     = main_getopt.get_argv()
+        argv     = Argv().get_argv()
         prefix   = argv['project']
 
         raw      = self.get(repo_name)

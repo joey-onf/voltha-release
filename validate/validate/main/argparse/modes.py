@@ -50,19 +50,21 @@ class Modes():
     ## -----------------------------------------------------------------------
     def add_argument(self, parser):
 
-        parser.add_argument('--debug',
+        modes = parser.add_argument_group('[MODES]')
+
+        modes.add_argument('--debug',
                             action  = 'store_true',
                             default = False,
                             help    = 'Enable script debug mode',
                             )
 
-        parser.add_argument('--debug-hack',
+        modes.add_argument('--debug-hack',
                             action  = 'store_true',
                             default = False,
                             help    = 'Enable custom debugging',
                             )
         
-        parser.add_argument('--display',
+        modes.add_argument('--display',
                             action  = 'append',
                             # type    = ar_at.valid_display_type,
                             default = [],
@@ -70,23 +72,23 @@ class Modes():
                             help    = 'Enable display attribute(s) mode.',
                             )
     
-        parser.add_argument('--todo',
+        modes.add_argument('--todo',
                             action  = ar_ac.opt_todo_action,
                             help    = 'Display program enhancement list.',
                             )
         
-        parser.add_argument('--trace',
+        modes.add_argument('--trace',
                             action = 'store_true',
                             help    = 'Resource names to trace during system probing',
                             )
         
-        parser.add_argument('--trace-all',
+        modes.add_argument('--trace-all',
                             action  = 'store_true',
                             default = False,
                             help    = 'Enable full time tracing for probes',
                             )
 
-        parser.add_argument('--verbose',
+        modes.add_argument('--verbose',
                             action  = 'store_true',
                             default = False,
                             help    = 'Enable script verbose mode',
