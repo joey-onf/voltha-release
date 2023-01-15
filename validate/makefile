@@ -72,7 +72,8 @@ main-args += --trace
 
 .PHONY: args
 args: $(venv-name)
-	$(HIDE) source $(venv-name)/bin/activate && $(main) $(main-args) $(voltha-args)
+	$(HIDE) source $(venv-name)/bin/activate\
+  && $(main) $(main-args) $(voltha-args)
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -128,6 +129,10 @@ packages-args += semantic_version
 packages-args += validators
 
 $(venv-name):
+	echo
+	echo "$@: ENTER"
+
+	@echo
 	@echo "============================="
 	@echo "Installing python virtual env"
 	@echo "============================="
@@ -141,6 +146,9 @@ $(venv-name):
 	@echo "Installing packages"
 	@echo "============================="
 	source $(venv-name)/bin/activate && pip install $(packages-args)
+
+	echo
+	echo "$@: LEAVE"
 	$(null)
 
 ## -----------------------------------------------------------------------
