@@ -32,8 +32,6 @@ test-python:
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 help::
-	@echo "  lint-yaml                     Syntax check yaml sources"
 	@echo "  test-python                   Invoke python unit tests"
-
 
 # [EOF]
