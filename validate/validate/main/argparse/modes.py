@@ -11,15 +11,7 @@
 ##---]  IMPORTS  [---##
 ##-------------------##
 import sys
-
-print(" ** python: %s" % sys.version)
-if sys.version_info < (3, 9):
-    print("** [APPLY] from typing import List")
-    # https://wiki.opennetworking.org/display/VOLTHA/PythonUpgrade
-    # 13:54:11 TypeError: 'type' object is not subscriptable
-    from typing import List
-else:
-    print("** [SKIP] from typing import List")
+import validate.main.types
 
 from validate.main.utils\
     import iam

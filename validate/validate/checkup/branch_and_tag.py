@@ -7,11 +7,7 @@
 ##-------------------##
 ##---]  IMPORTS  [---##
 ##-------------------##
-import sys
-if sys.version_info < (3, 9):
-    # https://wiki.opennetworking.org/display/VOLTHA/PythonUpgrade
-    # 13:54:11 TypeError: 'type' object is not subscriptable
-    from typing import List
+import validate.main.types
 
 import pprint
 from random               import randrange

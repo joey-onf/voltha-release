@@ -10,14 +10,10 @@
 ##-------------------##
 ##---]  IMPORTS  [---##
 ##-------------------##
-import sys
-if sys.version_info < (3, 9):
-    # https://wiki.opennetworking.org/display/VOLTHA/PythonUpgrade
-    # 13:54:11 TypeError: 'type' object is not subscriptable
-    from typing import List
-
 import unittest
 import pprint
+
+import validate.main.types
 
 from validate.main     import utils           as main_utils
 from validate.main     import argparse        as main_getopt

@@ -60,9 +60,7 @@ $(if $(display-type)\
 # release-type := full
 # release-type := point
 # release-type := patch
-$(if $(release-type)\
-  ,$(eval voltha-args += --release-type $(release-type))\
-  ,$(info [SKIP] --release-type))
+$(if $(release-type),$(eval voltha-args += --release-type $(release-type)))
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------

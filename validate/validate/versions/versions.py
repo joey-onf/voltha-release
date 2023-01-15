@@ -8,18 +8,14 @@
 ##-------------------##
 ##---]  IMPORTS  [---##
 ##-------------------##
-import sys
-if sys.version_info < (3, 9):
-    # https://wiki.opennetworking.org/display/VOLTHA/PythonUpgrade
-    # 13:54:11 TypeError: 'type' object is not subscriptable
-    from typing import List
-
 import pprint
 from pathlib           import Path
 
 import semver
 from semver            import VersionInfo
 import semantic_version # .Version.coerce
+
+import validate.main.types
 
 from validate.main     import utils           as main_utils
 from validate.main.file_utils\

@@ -129,8 +129,8 @@ packages-args += semantic_version
 packages-args += validators
 
 $(venv-name):
-	echo
-	echo "$@: ENTER"
+	@echo
+	@echo "virtualenv $@: ENTER"
 
 	@echo
 	@echo "============================="
@@ -139,16 +139,27 @@ $(venv-name):
 	virtualenv -p python3 $@               \
 	&& source $(venv-name)/bin/activate    \
 	&& python -m pip install --upgrade pip \
-#
-#	[ -e 'requirements.txt' ] && python -m pip install -r requirements.txt
-#
+
+	$(HIDE)[ -e 'requirements.txt' ] \
+  && { \
+	echo; \
+	echo "====================================="; \
+	echo "Installing modules (requirements.txt)"; \
+	echo "====================================="; \
+	}\
+  && source $(venv-name)/bin/activate \
+  && { echo "python -m pip install -r requirements.txt": }\
+  && python -m pip install -r requirements.txt
+
+	@echo
 	@echo "============================="
 	@echo "Installing packages"
 	@echo "============================="
-	source $(venv-name)/bin/activate && pip install $(packages-args)
+	source $(venv-name)/bin/activate \
+  && pip install $(packages-args)
 
-	echo
-	echo "$@: LEAVE"
+	@echo
+	@echo "virtualenv $@: ENTER"
 	$(null)
 
 ## -----------------------------------------------------------------------

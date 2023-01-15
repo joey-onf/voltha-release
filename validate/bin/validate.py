@@ -12,15 +12,6 @@ import os
 import pprint
 import sys
 
-print("** python.version: %s" % sys.version)
-if sys.version_info < (3, 9):
-    print("** [APPLY]: from typing import List")
-    # https://wiki.opennetworking.org/display/VOLTHA/PythonUpgrade
-    # 13:54:11 TypeError: 'type' object is not subscriptable
-    from typing import List
-else:
-    print("** [SKIP]: from typing import List")
-
 from pathlib               import Path
 from semver                import VersionInfo
 
@@ -96,7 +87,8 @@ def get_repo_names\
         project:bool   = None,
         component:bool = None,
         extra:bool     = None,
-    ) -> list[str]:
+    ) -> list: # list[str]
+
     '''Return a list of repository names based on arguments.
 
     :param project: Return a list of branch based repository names.
