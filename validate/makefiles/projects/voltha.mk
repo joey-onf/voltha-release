@@ -12,6 +12,7 @@ add-project   = $(addprefix --repo-project$(space),$($(1)))
 ##    - Required: git tag
 add-component = $(addprefix --repo-component$(space),$($(1)))
 
+is_jenkins = $(if $(strip $(WORKSPACE)),$(eval $(1)))
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -25,7 +26,11 @@ VER ?= 2.10
 # voltha-args += --debug
 # voltha-args += --verbose
 #  voltha-args += --release   ## will trip NotYetImplementedError(s)
-voltha-args += --sandbox /var/tmp/sandbox
+ifndef WORKSPACE
+  voltha-args += --sandbox /var/tmp/sandbox
+endif
+# $(call is-jenkins,(voltha-args += --sandbox /var/tmp/sandbox))
+
 # voltha-args += --archive /var/tmp/release-debug-voltha
 
 ## -----------------------------------------------------------------------

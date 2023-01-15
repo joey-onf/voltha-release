@@ -62,6 +62,7 @@ from validate.display.utils\
 from validate.pom_xml.utils import Extract
 
 ## ---------------------------------------------------------------------------
+## Intent: Gather pom.xml files and validate version information
 ## ---------------------------------------------------------------------------
 def do_pom_xml():
 
