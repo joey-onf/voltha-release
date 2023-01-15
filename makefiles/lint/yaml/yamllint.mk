@@ -18,8 +18,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # -----------------------------------------------------------------------
 
-null    :=#
-space   := $(null) $(null)
+$(if $(DEBUG),$(warning ENTER))
 
 yamllint      := $(env-clean) yamllint
 
@@ -38,11 +37,13 @@ yamllint-args += $(addprefix --config-file$(space),$(yamllint-conf))
 ## -----------------------------------------------------------------------
 lint lint-yaml:
 	$(HIDE)$(env-clean) find . -name '*.yaml' -type f -print0 \
-	    | xargs -0 -t -n1 $(yamllint) $(yamllint-args)
+	    | xargs -0 --no-run-if-empty -t -n1 $(yamllint) $(yamllint-args)
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 help::
 	@echo "  lint-yaml                     Syntax check yaml sources"
+
+$(if $(DEBUG),$(warning ENTER))
 
 # [EOF]

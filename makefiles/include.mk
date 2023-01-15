@@ -18,6 +18,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # -----------------------------------------------------------------------
 
+$(if $(DEBUG),$(warning ENTER))
+
+ONF_MAKE ?= $(MAKEDIR)# fix this -- two distinct makefile imports needed
 ONF_MAKE ?= $(error ONF_MAKE= is required)
 
 ## -----------------------------------------------------------------------
@@ -29,5 +32,7 @@ help::
 include $(ONF_MAKE)/consts.mk
 include $(ONF_MAKE)/lint/include.mk
 include $(ONF_MAKE)/python/include.mk
+
+$(if $(DEBUG),$(warning LEAVE))
 
 # [EOF]

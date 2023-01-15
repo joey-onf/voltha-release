@@ -18,15 +18,27 @@
 # SPDX-License-Identifier: Apache-2.0
 # -----------------------------------------------------------------------
 
+$(if $(DEBUG),$(warning ENTER))
+
 null        :=#
 space       := $(null) $(null)
 dot         ?= .
 
 HIDE        ?= @
-# SHELL       := bash -e -o pipefail
 
 env-clean   = /usr/bin/env --ignore-environment
+xargs-n1    := xargs -0 -t -n1 --no-run-if-empty
 
-export SHELL := /bin/bash -euo pipefail
+## -----------------------------------------------------------------------
+## Not recommended but support (-u)ndef-less shell for pyenv activate
+## TODO: declare a pyenv shell
+## -----------------------------------------------------------------------
+have-shell-bash := $(filter bash,$(subst /,$(space),$(SHELL)))
+$(if $(have-shell-bash),$(null),\
+  $(eval export SHELL := /bin/bash -euo pipefail))
+
+shell-pyenv := bash -eo pipefail
+
+$(if $(DEBUG),$(warning LEAVE))
 
 # [EOF]
