@@ -7,13 +7,14 @@
 ##-------------------##
 ##---]  GLOBALS  [---##
 ##-------------------##
-
 ONF_TOP	    ?= ..
 ONF_MAKE    ?= $(ONF_TOP)/makefiles
 
+# NO-LINT-MAKEFILE := true    # cleanup needed
+NO-LINT-PYTHON   := true    # cleanup needed
+NO-LINT-SHELL    := true    # cleanup needed
+
 include $(ONF_MAKE)/include.mk
-# include $(ONF_MAKE)/lint/include.mk
-# include $(ONF_MAKE)/python/include.mk
 
 TOP         ?= .
 MAKEDIR     ?= $(TOP)/makefiles
@@ -26,7 +27,6 @@ venv-name   := .venv
 ##--------------------##
 ##---]  INCLUDES  [---##
 ##--------------------##
-# $(if $(VOLTHA),$(eval include $(MAKEDIR)/voltha.mk))
 VOLTHA := 1
 include $(MAKEDIR)/projects/include.mk
 

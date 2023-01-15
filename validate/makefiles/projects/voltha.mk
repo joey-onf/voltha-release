@@ -3,6 +3,10 @@
 ## Intent: Project arguments needed to validate a VOLTHA image/relase.
 ## -----------------------------------------------------------------------
 
+ifndef release-type
+  release-type :=$(null)
+endif
+
 ## [PROJECT]
 ##    - Required: git branch
 ##    - Action: extra version checking
