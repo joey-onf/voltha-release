@@ -20,7 +20,7 @@ do
 	make) ver="$(${tool} --version | grep 'GNU Make')" ;;
 	*) ver="$(${tool} --version)" ;;
     esac
-    printf '%-30.30s %s\n' "$tool" "$ver"
+    printf '%-8.8s : %s\n' "$tool" "$ver"
 done
 
 echo
