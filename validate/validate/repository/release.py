@@ -8,6 +8,11 @@
 ##-------------------##
 ##---]  IMPORTS  [---##
 ##-------------------##
+if sys.version_info < (3, 9):
+    # 13:54:11 TypeError: 'type' object is not subscriptable
+    import sys
+    from typing import List
+
 import pprint
 from pathlib           import PurePath
 

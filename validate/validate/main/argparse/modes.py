@@ -10,6 +10,12 @@
 ##-------------------##
 ##---]  IMPORTS  [---##
 ##-------------------##
+
+if sys.version_info < (3, 9):
+    # 13:54:11 TypeError: 'type' object is not subscriptable
+    import sys
+    from typing import List
+
 from validate.main.utils\
     import iam
 from validate.main.argparse\
