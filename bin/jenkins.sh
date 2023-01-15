@@ -3,7 +3,7 @@
 # Intent: Jenkins job for invoking release validation checking"
 # -----------------------------------------------------------------------
 
-set -x
+set +x
 set -euo pipefail
 
 echo
@@ -15,7 +15,12 @@ tools+=('make')
 tools+=('python3')
 for tool in "${tools[@]}";
 do
-	printf '%-30.30s %s' "$tool" "$(${tool} --version)"
+    case "$tool" in
+	git) ver="$(${tool} --version  | grep 'git version')" ;;
+	make) ver="$(${tool} --version | grep 'GNU Make')" ;;
+	*) ver="$(${tool} --version)" ;;
+    esac
+    printf '%-30.30s %s\n' "$tool" "$ver"
 done
 
 echo
