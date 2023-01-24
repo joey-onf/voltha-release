@@ -136,9 +136,9 @@ $(venv-name):
 	@echo "============================="
 	@echo "Installing python virtual env"
 	@echo "============================="
-	virtualenv -p python3 $@               \
-	&& source $(venv-name)/bin/activate    \
-	&& python -m pip install --upgrade pip \
+	virtualenv -p python3 $@
+	$(HIDE)source "$(venv-name)/bin/activate"\
+  && python -m pip install --upgrade pip
 
 	$(HIDE)[ -e 'requirements.txt' ] \
   && { \
@@ -147,8 +147,8 @@ $(venv-name):
 	echo "Installing modules (requirements.txt)"; \
 	echo "====================================="; \
 	}\
-  && source $(venv-name)/bin/activate \
-  && { echo "python -m pip install -r requirements.txt": }\
+  && source "$(venv-name)/bin/activate" \
+  && { echo "python -m pip install -r requirements.txt"; }\
   && python -m pip install -r requirements.txt
 
 	@echo

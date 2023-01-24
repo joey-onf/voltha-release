@@ -9,6 +9,7 @@
 ##---]  IMPORTS  [---##
 ##-------------------##
 import pprint
+import json
 
 from validate.main.utils  import iam
 from validate.main.argparse.utils\
@@ -46,16 +47,24 @@ class GoMod(Error):
         if not argv['go_mod']:
             return True
 
+        conf_json = '/home/joey/projects/sandbox/voltha-release/validate/validate/release/2.11.json'
+        with open(conf_json) as fh:
+            conf = json.load(fh)
+        pprint.pprint(conf)
+
+        # module github.com/opencord/voltha-protos/v5
+
         fyls = traverse(root=path, incl=['go.mod'])
         for fyl in fyls:
             stream = cat(fyl)
             found = [line for line in stream if '/opencord/' in line]
             if len(found) > 0:
+                found = [line for line in found if not line.startswith('module')]
                 if False:
                     pprint.pprint({fyl : found})
                 else:
                     print('')
-                    print(fyl)
+                    print("%s:" % fyl)
                     for fnd in found:
                         print(fnd)
 

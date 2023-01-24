@@ -20,6 +20,9 @@
 
 $(if $(DEBUG),$(warning ENTER))
 
+##-------------------##
+##---]  GLOBALS  [---##
+##-------------------##
 null        :=#
 space       := $(null) $(null)
 dot         ?= .
