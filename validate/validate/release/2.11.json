@@ -21,6 +21,10 @@
 	"repo"     : "https://github.com/opencord/voltha-lib-go.git",
 	"tag"      : "7.3.1",
 	"verify"   : "tag",
+	"deps"     : {
+	    "voltha-lib-go" : "v7.3.2",
+	    "voltha-protos" : "v5.3.8"
+	},
 	"EOM"      : null
     },
     "voltha-protos" : {

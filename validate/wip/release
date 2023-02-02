@@ -1,0 +1,73 @@
+1) Create branch voltha-2.11:
+   - voltha-helm-charts
+   [RELEASE] create tag 2.11.0 on branch voltha-2.11
+
+2) Create release vx.y for all charts:
+   - change voltha-helm-chart and adapter to v2.11.0
+
+3) Create branch voltha-2.11 on voltha-system-tests
+   [RELEASE] create tag 2.11.0 on branch voltha-2.11
+   (only voltha-helm-charts and voltha-system-test receive the tag)
+
+4) Components
+   - create tag 2.11.0 on the component repository.
+   - Then create branch voltha-2.11.0 on tag 2.11.0
+
+5) Increment component::VERSION from 1.1.x to 1.2.0-dev
+
+
+
+
+Repos (lazily) branched for each release
+Charts
+
+    voltha-helm-charts
+
+Testing
+
+    voltha-system-tests
+
+    pod-configs
+
+Tools
+
+    bbsim (also creates containers)
+
+    voltctl
+
+ONOS Apps
+
+    aaa
+
+    dhcpl2relay
+
+    igmpproxy
+
+    kafka
+
+    mcast
+
+    olt
+
+    sadis
+
+    mac-learning
+
+Libraries
+
+    voltha-lib-go
+
+    voltha-protos
+
+Components (which build containers)
+
+    ofagent-go
+
+    voltha-go (rw_core)
+
+    voltha-openolt-adapter
+
+    voltha-openonu-adapter-go
+
+    voltha-onos (includes ONOS Apps)
+

@@ -1,0 +1,3 @@
+/var/tmp/sandbox/voltha-go/go.mod:
+	github.com/opencord/voltha-lib-go/v7 v7.3.2
+	github.com/opencord/voltha-protos/v5 v5.3.8
