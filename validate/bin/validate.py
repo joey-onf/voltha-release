@@ -242,6 +242,95 @@ def process():
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
+def check_chart(debug:bool=None):
+
+    ## These belong in separate files
+    # https://gerrit.opencord.org/c/voltha-helm-charts/+/33929    
+    check_chart('voltha-adapter-openolt',
+                {
+                    'appVersion' : {
+                        'min' : '2.11.4',
+                        'max' : '3.0.0',
+                        'exp' : '2.11.5',
+                        'voltha-2.11' : '2.11.5',
+                        'voltha-2.12' : None,
+                    },
+                    'version' : {
+                        'min' : '4.2.6',
+                        'max' : '5.0.0',
+                        'exp' : '4.2.12',
+                        'voltha-2.11' : '4.2.12',
+                        'voltha-2.12' : None,
+                    },
+                }
+
+    # https://gerrit.opencord.org/c/voltha-helm-charts/+/33929    
+    check_chart('voltha-adapter-openonu',
+                {
+                    'appVersion' : {
+                        'min' : '2.11.0',
+                        'max' : '3.0.0',
+                        'exp' : '2.11.1',
+                        'voltha-2.11' : '2.11.1',
+                        'voltha-2.12' : None,
+                    },
+                    'version' : {
+                        'min' : '2.2.8',
+                        'max' : '3.0.0',
+                        'exp' : '2.7.3',
+                        'voltha-2.11' : '2.7.3',
+                        'voltha-2.12' : None,
+                    },
+                }
+
+    # https://gerrit.opencord.org/c/voltha-helm-charts/+/33929    
+    check_chart('voltha-adapter-openonu',
+                {
+                    'appVersion' : {
+                        'min' : '2.11',
+                        'max' : '2.12',
+                        'exp' : '2.11', # released
+                        'voltha-2.11' : '2.11',
+                        'voltha-2.12' : None,
+                    },
+                    'version' : {
+                        'min' : '2.11.0',
+                        'max' : '2.12.0',
+                        'exp' : '2.11.1', # released
+                        'voltha-2.11' : '2.11.1',
+                        'voltha-2.12' : None,
+                    },
+                    'dependencies' : {
+                        'voltha' : {
+                            'min' : '2.11.6',
+                            'max' : '2.12.0',
+                            'exp' : '2.11.7', # released
+                            'voltha-2.10' : '2.11.6',
+                            'voltha-2.11' : '2.11.7',
+                            'voltha-2.12' : None,
+                        },
+                        'voltha-adapter-onu' : {
+                            'min' : '2.11.0',
+                            'max' : '2.12.0',
+                            'exp' : '2.11.1', # released
+                            'voltha-2.10' : '2.11.0',
+                            'voltha-2.11' : '2.11.1',
+                            'voltha-2.12' : None,
+                        },
+                        'voltha-adapter-olt' : {
+                            'min' : '2.11.4',
+                            'max' : '2.12.0',
+                            'exp' : '2.11.5', # released
+                            'voltha-2.10' : '2.11.4',
+                            'voltha-2.11' : '2.11.7',
+                            'voltha-2.12' : None,
+                        },
+                    }
+                }
+
+                
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
 def check_VERSION(debug:bool=None):
 
     ## Is this still being used ?

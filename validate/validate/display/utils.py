@@ -114,7 +114,7 @@ class Chart():
 
         debug = False
         banner('Chart.yaml dependencies', pre=True)
-        
+
         buff = {}
         fyls = traverse(root='.', incl=['Chart.yaml'])
         for fyl in fyls:

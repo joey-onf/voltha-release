@@ -113,15 +113,15 @@ version:
 check test: $(test-targets)
 
 # Display usage
-test-path-arg = validate/repository/test/test_release.py
-test-path ?= $(error $(MAKE) $@ test-path=$(test-path-arg) is required)\
+# test-path-arg = validate/repository/test/test_release.py
+test-path ?= $(error $(MAKE) $@ test-path=$(test-path) is required)\
 
 # invoke with
 check-one:
 	$(PYTHON) -m unittest $(test-path)
-xy:
-	$(PYTHON) -m unittest $(test-path-arg)
 
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
 packages-args += gitpython
 packages-args += pyyaml
 packages-args += semver

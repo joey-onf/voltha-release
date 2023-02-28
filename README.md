@@ -78,3 +78,17 @@ ALL DONE
 
 Enhancements and pull requests to improve the release process are always welcome.
 
+
+## Unit testing
+
+### Run all available tests
+```bash
+% cd validate
+% make test
+```
+
+### Debug test failures: run one suite
+```bash
+% cd validate
+% make check-one test-path=validate/repository/test/test_release.py
+```
