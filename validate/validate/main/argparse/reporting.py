@@ -72,6 +72,13 @@ class Reporting():
                              help    = 'Toggle go.mod released component version checking',
                             )
         
+        reporting.add_argument('--pom-xml', '--no-pom-xml',
+                            action  = ar_ac.NegateAction,
+                            dest    = 'pom_xml',
+                            nargs   = 0,
+                            help    = 'Display pom.xml version info',
+                            )
+
         reporting.add_argument('--tag-by-repo', '--no-tag-by-repo',
                             action  = ar_ac.NegateAction,
                             dest    = 'tag_by_repo',

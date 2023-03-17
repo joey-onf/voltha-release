@@ -14,6 +14,8 @@ ONF_MAKE    ?= $(ONF_TOP)/makefiles
 NO-LINT-PYTHON   := true    # cleanup needed
 NO-LINT-SHELL    := true    # cleanup needed
 
+var-tmp-sandbox ?= /var/tmp/sandbox
+
 include $(ONF_MAKE)/include.mk
 
 TOP         ?= .
@@ -22,12 +24,13 @@ MAKEDIR     ?= $(TOP)/makefiles
 PYTHON      ?= $(HOME)/.venv/3.10.6/bin/python
 
 main        := bin/validate.py
-venv-name   := .venv
+# venv-name   := .venv
 
 ##--------------------##
 ##---]  INCLUDES  [---##
 ##--------------------##
 VOLTHA := 1
+include $(MAKEDIR)/include.mk
 include $(MAKEDIR)/projects/include.mk
 
 ##-------------------##
@@ -36,43 +39,22 @@ include $(MAKEDIR)/projects/include.mk
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-all: args
-# all: clean-args
-
-clean-args : clean args
+all: invoke
+# init invoke
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 main-args := $(null)
+include $(MAKEDIR)/projects/main-args.mk
 
-# main-args += --debug
-main-args += --trace
+# [SEE ALSO] - Alter reporting for local developemnt
+# include $(MAKEDIR)/projects/reporting.mk
 
-## -------------------------------------
-## Local dev filters: reporting switches
-## -------------------------------------
-#ifndef WORKSPACE
-#  main-args += --no-go-mod
-#  main-args += --no-display-chart-deps
-#  main-args += --no-display-chart-version
-#  main-args += --no-display-version-file-delta
-#  main-args += --no-gerrit-urls
-#  main-args += --no-branch-by-repo
-#  main-args += --no-tag-by-repo
-#  main-args += --verbose
-# endif
-
-# main-args += --repo voltha-system-tests
-# main-args += --repo voltha-docs
-# main-args += --repo voltha-helm-charts
-# main-args += --repo pod-configs
-
-# voltha-args += --debug-hack
-# voltha-args += --archive /dev/null
-
-.PHONY: args
-args: $(venv-name)
-	$(HIDE) source $(venv-name)/bin/activate\
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+.PHONY: invoke
+invoke : $(venv-activate-script)
+	$(HIDE) $(activate)\
   && $(main) $(main-args) $(voltha-args)
 
 ## -----------------------------------------------------------------------
@@ -116,64 +98,23 @@ check test: $(test-targets)
 # test-path-arg = validate/repository/test/test_release.py
 test-path ?= $(error $(MAKE) $@ test-path=$(test-path) is required)\
 
-# invoke with
+## -----------------------------------------------------------------------
+## Intent: Invoke a single test suite
+## -----------------------------------------------------------------------
 check-one:
 	$(PYTHON) -m unittest $(test-path)
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-packages-args += gitpython
-packages-args += pyyaml
-packages-args += semver
-packages-args += semantic_version
-packages-args += validators
+clean-args : clean invoke
 
-$(venv-name):
-	@echo
-	@echo "virtualenv $@: ENTER"
-
-	@echo
-	@echo "============================="
-	@echo "Installing python virtual env"
-	@echo "============================="
-	virtualenv -p python3 $@
-	$(HIDE)source "$(venv-name)/bin/activate"\
-  && python -m pip install --upgrade pip
-
-	$(HIDE)[ -e 'requirements.txt' ] \
-  && { \
-	echo; \
-	echo "====================================="; \
-	echo "Installing modules (requirements.txt)"; \
-	echo "====================================="; \
-	}\
-  && source "$(venv-name)/bin/activate" \
-  && { echo "python -m pip install -r requirements.txt"; }\
-  && python -m pip install -r requirements.txt
-
-	@echo
-	@echo "============================="
-	@echo "Installing packages"
-	@echo "============================="
-	source $(venv-name)/bin/activate \
-  && pip install $(packages-args)
-
-	@echo
-	@echo "virtualenv $@: ENTER"
-	$(null)
-
-## -----------------------------------------------------------------------
-## -----------------------------------------------------------------------
 clean ::
 	-$(HOME)/etc/cleanup
 	$(RM) -r sandbox
-	$(RM) -r $(venv-name)
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 sterile :: clean
-	$(RM) -r /tmp/tmp*
-	$(RM) -r /var/tmp/sandbox
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------

@@ -148,6 +148,7 @@ class By:
         errors = []
         projects = self.arg_to_list(arg)
         for repo_name in projects:
+            print("repo_name = %s" % repo_name)
             branches = Sbx(repo_name=repo_name).get_branches()
             if not any([version == branch for branch in branches]):
                 msg = "REPO %s: Project branch required (%s)" % (repo_name, version)

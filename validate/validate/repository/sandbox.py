@@ -10,7 +10,7 @@
 import pprint
 from random               import randrange
 
-from pathlib              import Path
+from pathlib              import Path, PurePath
 # from urllib.parse         import urlparse, urljoin
 
 import git
@@ -29,14 +29,58 @@ class Sbx:
     '''.'''
 
     repo_name = None
+    repo_url  = None
     # __sandbox_cache__ = None
 
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def __init__(self, repo_name:str=None):
 
+        # path
+        if repo_name is None:
+            pass # fall through, used by sandbox_setup
+
+        elif self.is_url(repo_name):
+            self.repo_name = repo_name
+            repo_name = Path(repo_name).parts[-1]
+
+        if repo_name: # strip .git extension
+            repo_name = Path(repo_name).with_suffix('').as_posix()
+
         self.repo_name = repo_name
-        
+
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
+    def is_url(self, url=None) -> bool:
+        '''Helper method, determine if a string is a web url'''
+        ans = False
+        if url and '://' in url:
+            ans = True
+        return(ans)
+
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
+    def parse_repo_name(self, repo_name:str=None) -> dict:
+
+        ans = {'name':None, 'url':None}
+
+        # path
+        if repo_name is None:
+            pass # fall through, used by sandbox_setup
+
+        elif self.is_url(repo_name):
+            ans.repo_url = Path(repo_name)\
+               .with_suffix('')\
+               .with_suffix('.git')
+
+            repo_name = Path(repo_name).parts[-1]
+
+        # if not ans.repo_url:
+            # git clone ssh://gerrit.opencord.org:29418/aaa
+
+        self.repo_name = repo_name
+        return ans
+    
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
     def get_branches(self) -> list[str]:
@@ -44,7 +88,7 @@ class Sbx:
 
         ## See: release.Branches().get()
         repo_name = self.repo_name
-        repo = self.get_repo()
+        repo      = self.get_repo()
         branches=\
             [
                 ref.name
@@ -87,9 +131,16 @@ class Sbx:
         global ___sandbox_cache__
         sandbox = __sandbox_cache__
 
-        ans = sandbox \
-            if repo_name is None\
-            else Path(sandbox + '/' + repo_name).as_posix()
+        if repo_name is None:
+            ans = sandbox
+
+        elif '://' in repo_name.join(' '):
+            import pdb
+            pdb.set_trace()
+            fields = parse_repo_name(repo_name)
+            ans = fields['repo_name']
+        else:
+            ans = Path(sandbox + '/' + repo_name).as_posix()
             
         return ans
 

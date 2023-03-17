@@ -17,10 +17,10 @@ MAKEDIR     ?= $(TOP)/makefiles
 NO-LINT-PYTHON   := true    # cleanup needed
 NO-LINT-SHELL    := true    # cleanup needed
 
-include $(MAKEDIR)/consts.mk
+# include $(MAKEDIR)/consts.mk
 include $(MAKEDIR)/include.mk
-include $(MAKEDIR)/repos.mk
-include $(MAKEDIR)/commands/include.mk
+# include $(MAKEDIR)/repos.mk
+# include $(MAKEDIR)/commands/include.mk
 
 tgts += checkout-repos-all
 

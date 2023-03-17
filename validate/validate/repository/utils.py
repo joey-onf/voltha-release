@@ -24,6 +24,10 @@ import validate.main.types
 
 from validate.main.utils\
     import banner, iam
+
+from validate.main.context_utils\
+    import elapsed_time
+
 from validate.main.argparse.utils\
     import Argv
 from validate.main     import file_utils
@@ -33,7 +37,7 @@ from validate.repository.sandbox  import Sbx
 
 
 ## Profiling
-import timeit
+# import timeit
 from timeit            import Timer
 # from dis import dis    # disassembler
 
@@ -272,26 +276,21 @@ class Rcs:
 
         enter = time.time()
         states = []
-        for repo in repos:
-            if debug:
-                print("** clone: %s" % repo)
 
-            # Clone attributes: benchmark, state
-            state = self.get(repo)
+        with elapsed_time(total=True):
+            for repo in repos:
+                if debug:
+                    print("** clone: %s" % repo)
 
-            # Profile cloning
-            t1 = Timer(lambda: self.get(repo))
-            seconds = t1.timeit(number=1)
+                # Clone attributes: benchmark, state 
+                with elapsed_time\
+                     ( 
+                         banner  = debug,
+                         message = "(clone) %s" % repo,
+                     ):
 
-            # Display stats
-            elapsed = self.format_elapsed(seconds=seconds) 
-            print("** ELAPSED: %-8.8s (clone) %s" % (elapsed, repo))
-            states += [state]
-
-        leave = time.time()
-        print('** %s' % ('-' * 75))
-        elapsed = self.format_elapsed(enter, leave)
-        print('**   TOTAL: %-8.8s' % (elapsed))
+                    state = self.get(repo)
+                    states += [state]
 
         return not any(states)
 

@@ -1,0 +1,12 @@
+
+During the TST meeting yesterday we decided that my current bug fix of JIRA https://jira.opencord.org/browse/VOL-4887 should still be in the 2.11 release.
+The related patches in BBSIM and ONU adapter made it to Git, but not into DockerHub.
+Can you please take a look into the jobs below that went wrong?
+
+https://jenkins.opencord.org/job/github-release_bbsim/314/
+: FAILURE
+https://jenkins.opencord.org/job/docker-publish_bbsim/329/
+: FAILUREBuild Failed
+https://jenkins.opencord.org/job/docker-publish_voltha-openonu-adapter-go/378/
+: FAILURE (edited)
+

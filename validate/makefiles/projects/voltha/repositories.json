@@ -1,0 +1,43 @@
+[
+    {
+	"label" : "__template__",
+	"repository"      : "https://gerrit.opencord.org/__template__.git", 
+	"component"       : false,
+	"project"         : false,
+	"skip"            : true, 
+	"end-of-struct"   : true
+    },
+    {
+	"label" : "bbsim",
+	"repository"      : "https://gerrit.opencord.org/bbsim.git",
+	"component"       : true,
+	"tool"            : true,
+	"end-of-struct"   : true
+    }, 
+    {
+	"label" : "helm-repo-tools",
+	"repository"      : "https://gerrit.opencord.org/helm-repo-tools.git",
+	"component"       : true,
+	"tool"            : true,
+	"end-of-struct"   : true
+    },    
+    {
+	"label" : "voltctl",
+	"repository"      : "https://gerrit.opencord.org/voltctl.git",
+	"component"       : true,
+	"tool"            : true,
+	"end-of-struct"   : true
+    },    
+    {
+	"label" : "voltha-helm-charts",
+	"repository"      : "https://gerrit.opencord.org/voltha-helm-charts.git",
+	"project"         : true,
+	"end-of-struct"   : true
+    },
+    {
+	"label" : "voltha-system-tests",
+	"repository"      : "https://gerrit.opencord.org/voltha-system-tests.git",
+	"project"         : true,
+	"end-of-struct"   : true
+    }
+]

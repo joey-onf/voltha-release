@@ -6,14 +6,13 @@
 ##-------------------##
 ##---]  IMPORTS  [---##
 ##-------------------##
-# from contextlib       import contextmanager
+# import contextlib
+from contextlib        import contextmanager
 from contextlib        import ContextDecorator
 
 import time
 
-from validate.main import utils as main_utils
-#     import iam, banner
-
+from validate.main     import utils        as main_utils
 
 ## -----------------------------------------------------------------------
 ## Intent Create a transient temp directory with automated cleanup.
@@ -26,41 +25,64 @@ from validate.main import utils as main_utils
 class elapsed_time(ContextDecorator):
     '''Wrap a logic block within a closure that reports elapsed time.'''
 
-    def __init__(self, banner:str, debug:bool=None):
-        '''.'''
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
+    def __init__(self,
+                 banner:bool = None,
+                 total:bool  = None,
+                 message:str = None,
+                 ):
+        '''Create a closuer to display elapsed time for a logic block.
 
-        self.iam = main_utils.iam(frame=2) # parent
+        Usage:
+          with elapsed_time(total=true):
+            for repo in repos:
+              with elapsed_time\(
+                 banner  = true
+                 message = 'Checkout repository %s' % repo,
+                 ):
+                   do_checkout(repo)
+                   time.sleep(5)       # silly string
+        '''
 
-        if debug is None:
-            debug = False
-        self.debug = debug
+        self.iam   = main_utils.iam(frame=2) # parent
+        
+        self.start = None
+        self.total = total
 
-        main_utils.banner(banner, pre=True)
-        if debug:
-            print('')
-            print('** %s: ENTER' % iam)
+        if message:
+            if banner:
+                main_utils.banner(message, pre=True)
+            else:
+                print('** %-18.18s %s' % ('', message))
+
+        if message is None:
+            message = self.iam
+        self.message = message
+                
         return
     
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
     def __enter__(self):
         '''Closure: record start time when block is entered.'''
 
-        self.enter = time.time()
+        if self.start is None:
+            self.start = time.time()
         return self
 
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
     def __exit__(self, exc_type, exc, exc_tb):
         '''Closure: Report elapsed time during object destruction.'''
 
-        self.leave = time.time()
-
-        iam   = self.iam
-        debug = self.debug
-
-        delta = self.leave - self.enter
+        delta   = time.time() - self.start
         elapsed = time.strftime('%H:%M:%S', time.gmtime(delta))
-        if debug:
-            print('** %s: LEAVE' % iam)
-
-        print("** ELAPSED: %-8.8s %s" % (elapsed, iam))
+        if self.total:
+            print('** ', '-' * 71)
+            print('   %-8.8s: %-8.8s' % ('TOTAL', elapsed))
+        else:
+            print('** %-8.8s: %-8.8s %s' % ('ELAPSED', elapsed, self.message))
 
         return
 

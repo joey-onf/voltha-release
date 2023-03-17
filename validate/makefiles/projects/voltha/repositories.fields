@@ -1,0 +1,7 @@
+Field definitions for repositories.json
+
+repository       Path to a gerrit/github revision control repository.
+
+component        Report component version information in docs.voltha.org ?
+project
+tool             Standalone tool

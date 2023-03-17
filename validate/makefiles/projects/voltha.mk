@@ -10,13 +10,13 @@ endif
 ## [PROJECT]
 ##    - Required: git branch
 ##    - Action: extra version checking
-add-project   = $(addprefix --repo-project$(space),$($(1)))
+#add-project   = $(addprefix --repo-project$(space),$($(1)))
 
 ## [COMPONENT]
 ##    - Required: git tag
-add-component = $(addprefix --repo-component$(space),$($(1)))
-
-is_jenkins = $(if $(strip $(WORKSPACE)),$(eval $(1)))
+#add-component = $(addprefix --repo-component$(space),$($(1)))
+#
+# is_jenkins = $(if $(strip $(WORKSPACE)),$(eval $(1)))
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -64,11 +64,11 @@ $(if $(release-type),$(eval voltha-args += --release-type $(release-type)))
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
+voltha-proj-json ?= $(MAKEDIR)/projects/voltha/repositories.json
+voltha-proj-data ?= $(MAKEDIR)/projects/voltha/repositories.data
 voltha-proj := $(null)
-voltha-proj += voltha-helm-charts
-voltha-proj += voltha-system-tests
+voltha-proj += $(call token-stream,$(voltha-proj-data))
 voltha-args += $(call add-project,voltha-proj)
-# voltha-args += $(addprefix --repo-project$(space),$(voltha-proj))
 
 ## -----------------------------------------------------------------------
 ## https://docs.voltha.org/master/release_notes/release_process.html
@@ -81,10 +81,13 @@ voltha-test += pod-configs
 voltha-args += $(call add-component,voltha-test)
 
 voltha-tools := $(null)
-voltha-tools += bbsim
-voltha-tools += voltctl
-voltha-tools += helm-repo-tools
+# voltha-tools += bbsim
+# voltha-tools += voltctld
+# voltha-tools += helm-repo-tools
+voltha-tools := $(call get-json,tool,$(voltha-proj-json))
+$(info voltha-tools-args=$(voltha-tools))
 voltha-args += $(call add-component,voltha-tools)
+$(error outa here)
 
 voltha-onos := $(null)
 voltha-onos += aaa
@@ -95,6 +98,8 @@ voltha-onos += mcast
 voltha-onos += olt
 voltha-onos += sadis
 voltha-onos += mac-learning# maclearner
+
+voltha-onos += https://gerrit.onosproject.org/onos
 # voltha-onos += onos#                              # valid or an alias ?
 # voltha-onos += onos-app-release#                  #
 voltha-args += $(call add-component,voltha-onos)
@@ -118,6 +123,10 @@ voltha-repos += ci-management
 voltha-repos += voltha-test-manifest
 voltha-repos += voltha-bal
 
+## -----------------------------------------------------------------------
+## Reporting flags
+## -----------------------------------------------------------------------
+voltha-args += --no-pom-xml
 # https://docs.voltha.org/master/release_notes/voltha_2.10.html#openolt-agent-packages
 
 voltha-args += $(call add-repo,voltha-repos)
@@ -127,7 +136,7 @@ voltha-args += $(call add-repo,voltha-repos)
 voltha-repos-misc += onos-app
 voltha-args += $(call add-repo,voltha-repos-misc)
 
-
+# $(foreach arg,$(voltha-args),$(info ** voltha-args += $(arg)))
 
 ## [git clone]
 ## -----------------------------------------------------------------------

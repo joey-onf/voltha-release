@@ -24,7 +24,7 @@ if True: # Set searchpath early
     anchor = Path(pgm_path).parent.parent.as_posix()
     sys.path.insert(0, anchor)
 
-from validate.main.utils   import iam
+from validate.main.utils   import iam, banner
 from validate.main.argparse.utils\
     import Argv
 
@@ -66,6 +66,10 @@ from validate.pom_xml.utils import Extract
 ## ---------------------------------------------------------------------------
 def do_pom_xml():
 
+    import pdb
+    pdb.set_trace()
+
+    banner('do_pm_xml')
     fyls = traverse(root='/var/tmp/sandbox', incl=['pom.xml'])
     for fyl in fyls:
         if not 'aaa' in fyl:
@@ -78,7 +82,6 @@ def do_pom_xml():
         
     xyz = 1
     return
-
         
 ## ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
@@ -158,7 +161,11 @@ def process():
     if len(argv['display']) > 0:
         Display().display_sandbox_attributes()
 
-    do_pom_xml()
+    ## -------------------------------
+    ## Report on pom.xml file versions
+    ## -------------------------------
+    if argv['pom_xml']:
+        do_pom_xml()
 
     ## ---------------------------
     ## Validate
@@ -263,6 +270,7 @@ def check_chart(debug:bool=None):
                         'voltha-2.12' : None,
                     },
                 }
+                )
 
     # https://gerrit.opencord.org/c/voltha-helm-charts/+/33929    
     check_chart('voltha-adapter-openonu',
@@ -282,6 +290,7 @@ def check_chart(debug:bool=None):
                         'voltha-2.12' : None,
                     },
                 }
+                )
 
     # https://gerrit.opencord.org/c/voltha-helm-charts/+/33929    
     check_chart('voltha-adapter-openonu',
@@ -327,19 +336,16 @@ def check_chart(debug:bool=None):
                         },
                     }
                 }
+                )
 
-                
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-def check_VERSION(debug:bool=None):
+def check_VERSION_disabled(debug:bool=None):
 
     ## Is this still being used ?
 
     print("** IS THIS STILL USED (check_VERSION) called")
 
-    import pdb
-    pdb.set_trace()
-    
     if debug is None:
         debug = False
 
