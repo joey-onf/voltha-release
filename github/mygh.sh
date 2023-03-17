@@ -8,7 +8,7 @@
 ##-------------------##
 ##---]  GLOBALS  [---##
 ##-------------------##
-source "${HOME}/mygh.sh"
+source "./mygh.conf"
 source "lib/config.sh"
 source "lib/prompt.sh"
 
