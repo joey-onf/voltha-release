@@ -1,0 +1,20 @@
+voltha-helm-charts
+  - create a branch named voltha-2.12   v2.12
+  - Update Chart.yaml (help and adapter charts) to 2.12.0
+
+voltha-system-tests:
+  - create branch voltha-2.12
+  - create tag 2.12.0 on voltha-2.12 branch
+
+** These two are the only ones who receive tag=2.12.0
+
+
+For all other repos:
+  o Create release tag 2.12.0
+  o From release tag create branch voltha-2.12
+
+Component repository VERSION FILE:
+  o Increase minor version from 1.1.x to 1.2.0-dev
+
+
+https://docs.voltha.org/master/release_notes/release_process.html
