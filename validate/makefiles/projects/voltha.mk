@@ -87,7 +87,7 @@ voltha-tools := $(null)
 voltha-tools := $(call get-json,tool,$(voltha-proj-json))
 $(info voltha-tools-args=$(voltha-tools))
 voltha-args += $(call add-component,voltha-tools)
-$(error outa here)
+# $(error outa here)
 
 voltha-onos := $(null)
 voltha-onos += aaa

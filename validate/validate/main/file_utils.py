@@ -87,6 +87,28 @@ def pushd(path=None):
 ##   from validate.main.file_utils import cat
 ##   print( cat('/etc/passwd') )
 ## ---------------------------------------------------------------------------
+def cat_to_scalar(path:str) -> str:
+    '''Read and return contents of a file.
+
+    :param path: Name of file to read
+    :type  path: str
+
+    :return: Contents of the requested file as a string
+    :rtype: str
+    '''
+
+    with open(path, mode='r', encoding='utf-8') as stream:
+        ans = stream.read().replace('\n', '')
+
+    return ans
+
+## ---------------------------------------------------------------------------
+## Intent: Retrieve and return contents of a file on disk.
+## ---------------------------------------------------------------------------
+## Usage:
+##   from validate.main.file_utils import cat
+##   print( cat('/etc/passwd') )
+## ---------------------------------------------------------------------------
 def cat(path:str) -> list[str]:
     '''Read and return contents of a file.
 

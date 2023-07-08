@@ -24,7 +24,6 @@ MAKEDIR     ?= $(TOP)/makefiles
 PYTHON      ?= $(HOME)/.venv/3.10.6/bin/python
 
 main        := bin/validate.py
-# venv-name   := .venv
 
 ##--------------------##
 ##---]  INCLUDES  [---##
@@ -49,6 +48,27 @@ include $(MAKEDIR)/projects/main-args.mk
 
 # [SEE ALSO] - Alter reporting for local developemnt
 # include $(MAKEDIR)/projects/reporting.mk
+
+# voltha-args += --component voltha-helm-charts
+# voltha-args += --component voltha-system-tests
+
+# voltha-args += --component ofagent-go
+# voltha-args += --component voltha-docs
+# voltha-args += --component voltha-go
+# voltha-args += --component voltha-helm-charts
+# voltha-args += --component voltha-lib-go
+# voltha-args += --component voltha-onos
+# voltha-args += --component voltha-openolt-adapter
+voltha-args += --component voltha-openonu-adapter-go
+voltha-args += --component voltha-protos
+# voltha-args += --component voltha-system-tests
+
+
+
+# voltha-args += --component voltha-lib-onos
+
+
+# voltha-args += --component voltha-test-manifest
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------

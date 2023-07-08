@@ -15,6 +15,8 @@ import semver
 from semver            import VersionInfo
 import semantic_version # .Version.coerce
 
+from validate.main.utils\
+    import iam
 import validate.main.types
 
 from validate.main     import utils           as main_utils
@@ -136,7 +138,7 @@ class Ver:
 
         ans = False
         if isinstance(version, str):
-            ans = VersionInfo.isvalid(version)
+            ans = VersionInfo.is_valid(version)
 
         return ans
 
@@ -273,6 +275,46 @@ class Ver:
 
     ## -----------------------------------------------------------------------
     ## -----------------------------------------------------------------------
+    def meta_get_version_by_file(self, fyl:str) -> str:
+        '''
+
+        :param: fyl: Source file to read.
+        :type   fyl: str
+
+        :return: Version string detected (may return None).
+        :rtype : str
+        '''
+
+        ans = None
+        if not Path(fyl).exists():
+            err = 'File does not exist'
+            msg = pprint.pformat({
+                'iam'     : iam(),
+                'path'    : fyl,
+            }, indent=4)
+            errors += ['\n'.join(['', err, '', msg, ''])]
+        else:
+            self.trace_mode()
+
+            ans = { 'source':fyl.as_posix(), 'version':None, 'valid':None }
+            streams = cat(fyl)
+
+            # Flatten list-of-lists created by cat().split()
+            tokens  = [token for sublist in streams for token in sublist.split()]
+
+            for token in tokens:
+                if len(token) > 0:
+                    ans['version'] = token
+                    ans['valid']   = VersionInfo.is_valid(token)
+                    ans['is_dev']  = '-dev' in token
+                    ans['iam']     = iam()
+                    if ans['valid']:
+                        break
+
+        return ans
+
+    ## -----------------------------------------------------------------------
+    ## -----------------------------------------------------------------------
     def get_version_by_file(self, fyl:str) -> str:
         '''Slurp file and return embedded version string.
 
@@ -299,7 +341,7 @@ class Ver:
             tokens  = [token for sublist in streams for token in sublist.split()]
 
             for token in tokens:
-                if VersionInfo.isvalid(token):
+                if VersionInfo.is_valid(token):
                     ans = token
                     break
 

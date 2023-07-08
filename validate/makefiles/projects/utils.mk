@@ -33,7 +33,7 @@ token-stream=$(strip \
 ## Usage:
 ##    components = $(call get-json,components,path-to-json-file)
 ## -----------------------------------------------------------------------
-$(error fix this)
+# $(error fix this)
 
 voltha-tools-args=jq -r '.[] | select(.tool) | .label' ./makefiles/projects/voltha/repositories.json
 # makefiles/projects/voltha.mk:90: *** outa here.  Stop.

@@ -93,7 +93,8 @@ class ByFile:
                     'iam'     : iam(),
                     'path'    : fyl,
                     'version' : version,
-                    'source'  : '\n'.join([ streams[0:4] ]),
+                    'source'  : '\n'.join(streams[0:4]),
+#                    'source'  : '\n'.join([ streams[0:4] ]),
                 }, indent=4)
                 errors += ['\n'.join(['', err, '', msg, ''])]
 

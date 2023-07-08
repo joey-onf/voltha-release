@@ -32,6 +32,8 @@ from validate.main.file_utils\
     import pushd, traverse
 from validate.main         import file_utils
 
+from validate.data.VERSION import VersionFile
+
 from validate.display.utils\
     import Display
 
@@ -60,6 +62,8 @@ from validate.display.utils\
     import Branches, Chart, FileVersion, GerritUrls, Tags
 
 from validate.pom_xml.utils import Extract
+
+from validate.versions.versions import Ver
 
 ## ---------------------------------------------------------------------------
 ## Intent: Gather pom.xml files and validate version information
@@ -227,7 +231,15 @@ def process():
     post = Post()
     if not post.is_valid():
         errors += post.get_error()
-            
+
+    banner('Gather VERSION file strings')
+    version_file = VersionFile().gather(argv['component'])
+    pprint.pprint({
+        'VERSION' : version_file,
+    })
+
+    # if 'voltha-system-tests' in argv.components:
+
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 # def check_VERSION_required(debug:bool=None):

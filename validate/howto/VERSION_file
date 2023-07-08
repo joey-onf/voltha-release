@@ -1,0 +1,5 @@
+    banner('Gather VERSION file strings')
+    version_file = VersionFile().gather(argv['component'])
+    pprint.pprint({
+        'VERSION' : version_file,
+    })

@@ -1,6 +1,18 @@
-GitPython==3.1.29
-PyYAML==6.0
-semantic-version==2.10.0
-semver>=2.13.0
-validators==0.20.0
-validators==0.20.0
+# -*- makefile -*-
+## -----------------------------------------------------------------------
+## Intent: Install python modules required by the validate.py program.
+## -----------------------------------------------------------------------
+
+# [TOOLS]
+gitpython
+
+# [PARSER]
+pyaml
+
+# [VERSIONING]
+packaging
+semantic_version
+semver
+validators
+
+# [EOF]

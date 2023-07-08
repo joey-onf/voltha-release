@@ -268,7 +268,7 @@ class Rcs:
         if debug is None:
             debug = False
 
-        banner('Repository Checkout')
+        banner('Repository Checkout: ' + Path('.').resolve().as_posix())
 
         errors = []
         repos = list(set(repos))

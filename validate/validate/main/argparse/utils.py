@@ -23,6 +23,8 @@ from validate.main.argparse\
     import types  as ar_at
 from validate.main.argparse.filters\
     import Filters
+from validate.main.argparse.components\
+    import Components
 from validate.main.argparse.modes\
     import Modes
 from validate.main.argparse.release\
@@ -249,6 +251,7 @@ class Argv:
         ## -----------------------------------------------------------------------
         ## SECTION(s)
         ## -----------------------------------------------------------------------
+        Components().add_argument(parser)
         Release().add_argument(parser)
         Vcs().add_argument(parser)
         Reporting().add_argument(parser)

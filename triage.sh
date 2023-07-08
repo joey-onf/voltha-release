@@ -19,27 +19,33 @@ work="tmp"
 repo='voltha-docs'
 
 here=$(realpath --canonicalize-existing .)
+root="${here%/*}"
 logdir="$here/.errors/$repo/$ccyymmdd"
 
-
-precheck "$repo"
-
-
+ts_dir="${here}/${work}/.ts"
+mkdir -vp "$ts_dir"
 
 mkdir -vp "$work" "$logdir"
 pushd "$work" >/dev/null
 
 /bin/rm -fr "$repo"
-mkdir -vp .ts "$repo"
+mkdir -vp "$repo"
+
+/bin/ls
 
 # make -f ../makefile "$repo"
-rsync -r --checksum ../voltha-docs/. voltha-docs/.
+rsync -r --checksum "${root}/voltha-docs/." voltha-docs/.
 # cp requirements.txt "$repo"
 # /bin/rm -f "$repo/requirements.txt"
 # touch "$repo/requirements.txt"
 # cp requirements.txt "$repo"
 
-ts=".ts/$repo"
+echo
+echo "** PWD: $(/bin/pwd)"
+echo
+precheck "$repo"
+
+ts="${ts_dir}/$repo"
 date > "$ts"
 
 pushd "$repo" >/dev/null
