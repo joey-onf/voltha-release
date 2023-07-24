@@ -1,7 +1,36 @@
-#!/bin/bash
+d#!/bin/bash
+## -----------------------------------------------------------------------
+## Intent: Release helper script used to autoamte patching voltha
+##         repository go.mod files.  Script is custom and evolves at
+##         release time while patching voltha-protos, voltha-lib-go, etc
+##         in build order.
+## -----------------------------------------------------------------------
+## Todo:
+##   o Add support for a --release x.y script to support branched versions.
+##   o Version checking should accept newer versions but warn about deltas.
+## -----------------------------------------------------------------------
 
+##------------------##
+##---]  GLOBAL  [---##
+##------------------##
 declare -a fx=()
 
+## -----------------------------------------------------------------------
+## Intent: Display program usage statement
+## -----------------------------------------------------------------------
+function usage()
+{
+    [[ $# -gt 0 ]] && echo "ERROR: $*"
+
+    cat <<EOHELP
+
+Usage: $0
+  --update     Update dependencies to released versions.
+  --view       Display go.mod voltha deps and version strings (default)
+
+EOHELP
+    return
+}
 ##--------------------------------##
 ##---]  External golang deps  [---##
 ##--------------------------------##
@@ -69,9 +98,14 @@ while [ $# -gt 0 ]; do
     arg="$1"; shift
 
     case "$arg" in
-	*find*|*view*) find_voltha_deps ;;
-	*update*) update_deps    ;;
-	*) echo "Detected unknown arg [$arg]" ;;
+	-*find*|*view*) find_voltha_deps ;;
+	-*update*) update_deps    ;;
+	#
+	-*help) usage; exit 0 ;;
+	*)
+	    usage "Detected unknown arg [$arg]"
+	    exit 1
+	    ;;
     esac
 done
 
