@@ -10,17 +10,20 @@
 ##-------------------##
 ##---]  GLOBALS  [---##
 ##-------------------##
-TOP         ?= .
-MAKEDIR     ?= $(TOP)/makefiles
+include $(strip \
+  $(dir \
+    $(abspath $(lastword $(MAKEFILE_LIST)))\
+  )\
+)/makefiles/include.mk
+
+# TOP         ?= .
+# MAKEDIR     ?= $(TOP)/makefiles
 
 # NO-LINT-MAKEFILE := true    # cleanup needed
 NO-LINT-PYTHON   := true    # cleanup needed
 NO-LINT-SHELL    := true    # cleanup needed
 
-# include $(MAKEDIR)/consts.mk
-include $(MAKEDIR)/include.mk
-# include $(MAKEDIR)/repos.mk
-# include $(MAKEDIR)/commands/include.mk
+# include $(ONF_MAKEDIR)/include.mk
 
 tgts += checkout-repos-all
 
@@ -31,11 +34,11 @@ all: $(tgts)
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-clean:
+clean ::
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-sterile:
+sterile ::
 	$(RM) -r sandbox
 	$(MAKE) triage-clean
 
@@ -61,5 +64,11 @@ triage:
 
 triage-clean:
 	$(RM) -r tmp
+
+## ---------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
+prep:
+	$(onf-mk-root)/go_mod/fix_go_mod.sh
+	@echo '[TODO]: ../etc/copyright_fix.sh'
 
 # [EOF]

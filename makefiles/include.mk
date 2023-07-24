@@ -20,8 +20,20 @@
 
 $(if $(DEBUG),$(warning ENTER))
 
-ONF_MAKE ?= $(MAKEDIR)# fix this -- two distinct makefile imports needed
-ONF_MAKE ?= $(error ONF_MAKE= is required)
+ifdef foo
+  $(error detected re-import)
+endif
+foo := 1
+
+## Define vars based on relative import (normalize symlinks)
+## Usage: include makefiles/onf/include.mk
+## -----------------------------------------------------------------------
+onf-mk-abs    ?= $(abspath $(lastword $(MAKEFILE_LIST)))
+onf-mk-top    := $(subst /include.mk,$(null),$(onf-mk-abs))
+ONF_MAKEDIR   := $(onf-mk-top)
+onf-mk-root   := $(patsubst %/,%,$(dir $(onf-mk-top)))
+
+TOP ?= $(patsubst %/makefiles/include.mk,%,$(onf-mk-abs))
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -29,9 +41,9 @@ help::
 	@echo "USAGE: $(MAKE) [options] [target] ..."
         # @echo "  test                          Sanity check chart versions"
 
-include $(ONF_MAKE)/consts.mk
-include $(ONF_MAKE)/lint/include.mk
-include $(ONF_MAKE)/python/include.mk
+include $(ONF_MAKEDIR)/consts.mk
+include $(ONF_MAKEDIR)/lint/include.mk
+include $(ONF_MAKEDIR)/python/include.mk
 
 $(if $(DEBUG),$(warning LEAVE))
 

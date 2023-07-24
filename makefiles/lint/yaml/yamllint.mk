@@ -27,7 +27,7 @@ yamllint      := $(env-clean) yamllint
 ## -------------------------------
 # yamllint-cfg := .yamllint
 yamllint-cfg := yamllint.helm
-yamllint-conf = $(wildcard $(yamllint-cfg) $(MAKEDIR)/lint/yaml/$(yamllint-cfg))
+yamllint-conf = $(wildcard $(yamllint-cfg) $(ONF_MAKEDIR)/lint/yaml/$(yamllint-cfg))
 yamllint-args += $(addprefix --config-file$(space),$(yamllint-conf))
 
 # yamllint-args := --no-warnings

@@ -5,10 +5,13 @@
 ##   o Load all artifacts and resource URLS for a given component
 ## -----------------------------------------------------------------------
 
+# https://gerrit.opencord.org/plugins/gitiles/voltha-protos/+/refs/tags/v5.4.8
+
 ##-------------------##
 ##---]  GLOBALS  [---##
 ##-------------------##
 set -euo pipefail
+declare -g -a urls=()
 
 BROWSER='firefox'
 # BROWSER={BROWSER:-firefox}
@@ -74,6 +77,35 @@ function gen_docs_voltha_org()
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
+function do_golang()
+{
+    local -n ref=$1; shift
+    local pkg="$1"; shift
+    local ver="$1"; shift
+
+    case "$pkg" in
+	voltha-protos) ref+=('https://pkg.go.dev/github.com/opencord/voltha-protos/v5') ;;
+    esac
+
+    return
+}
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+function do_pypi()
+{
+    local -n ref=$1; shift
+    local pkg="$1"; shift
+    local ver="$1"; shift
+
+    case "$pkg" in
+	voltha-protos) ref+=("https://pypi.org/project/${pkg}/") ;;
+    esac
+    return
+}
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
 function usage()
 {
     cat <<EOH
@@ -82,10 +114,13 @@ Usage: $0
     --pkg
   --version     Include versioned URLs
 
+  --go
   --docker      DockerHUB urls
+  --gerrit
+  --github
   --maven       Artifact URLs (Maven Central)
-    --mvn
   --nexus       Artifact URLs (staging)
+  --pypi        Python artifacts
 
 EOH
 
@@ -113,7 +148,11 @@ while [ $# -gt 0 ]; do
     arg="$1"; shift
     case "$arg" in
 
+	-*go*)    declare -i argv_golang=1 ;;
 	-*docker) declare -i argv_docker=1 ;;
+	-*gerrit) declare -i argv_gerrit=1 ;;
+	-*github) declare -i argv_github=1 ;;
+	-*pypi)   declare -i argv_github=1 ;;
 
 	--gen)
 	    declare -a html=()
@@ -139,20 +178,24 @@ while [ $# -gt 0 ]; do
 done
 
 [[ ${#packages[@]} -eq 0 ]] && error "--package is required"
-[[ ${#prefixes[@]} -eq 0 ]] && error "--docker --mvn and/or --nexus are required"
+#[[ ${#prefixes[@]} -eq 0 ]] && error "--docker --mvn and/or --nexus are required"
 
 
 firefox    # target of URLs launched
 
-
-
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
 declare -p prefixes
 declare -p packages
 for prefix in "${prefixes[@]}";
 do
 for package in "${packages[@]}";
 do
-    declare -a urls=()
+    [[ -v argv_docker ]] && do_docker
+    [[ -v argv_golang ]] && do_golang url "$package" "$ver"
+    [[ -v argv_pypi ]]   && do_pypi   url "$package" "$ver"
+
+
     pkg="${prefix}/${package}"
     api="${prefix}/${package}-api"
     app="${prefix}/${package}-app"
@@ -170,6 +213,30 @@ do
 	done
     fi
 
+done # packages
+done # prefixes
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+for package in "${packages[@]}";
+do
+    gerrit="https://gerrit.opencord.org/plugins/gitiles/${package}"
+    [[ -v argv_gerrit ]] && urls+=("$gerrit")
+
+    github="https://github.com/opencord/${package}"
+    [[ -v argv_github ]] && urls+=("$github")
+
+    for ver in "${versions[@]}";
+    do
+	[[ -v argv_gerrit ]] && urls+=("$gerrit/+/refs/tags/v${ver}")
+	[[ -v argv_github ]] && urls+=("$github/tree/v${ver}")
+	# https://gerrit.opencord.org/plugins/gitiles/voltha-protos/+/refs/tags/v5.4.8
+	# https://gerrit.opencord.org/plugins/gitiles/voltha-protos/+/refs/tags/5.4.8
+    done
+
+done
+
+
     declare -p urls | tr '=' '\n' | grep '://'
     declare -a tmp=()
     for url in "${urls[@]}";
@@ -178,9 +245,5 @@ do
     done
 
     "$BROWSER" "${tmp[@]}" &
-done # packages
-done # prefixes
-
-[[ -v argv_docker ]] && do_docker
 
 # [EOF]
