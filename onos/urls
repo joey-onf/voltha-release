@@ -1,0 +1,3 @@
+https://gerrit.opencord.org/c/voltha-onos/+/33963
+
+    - Check version of onosproject/onos referenced in Dockerfile

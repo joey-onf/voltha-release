@@ -1,0 +1,8 @@
+1) Checkout repo:ci-management
+2) Validate version strings in use.
+3) from jjb/software-updates.yaml
+    - v2.9.0-SNAPSHOT artifacts no longer exist
+    - Should jobs continue to use snapshots post release ?
+
+   aaa-oar-url: 'https://oss.sonatype.org/content/groups/public/org/opencord/aaa-app/2.9.0-SNAPSHOT/aaa-app-2.9.0-20230111.164338-1.oar'
+   aaa-oar-url: 'https://oss.sonatype.org/content/groups/public/org/opencord/aaa-app/2.10.3/aaa-app-2.10.3.oar'

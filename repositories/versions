@@ -1,0 +1,22 @@
+# repository : version : go-version(v)
+bbsim::
+bbsim-sadis-server::
+voltha::
+voltha-adtran-adapter::
+voltha-bal::
+voltha-bbsim::
+voltha-docker-tools::
+voltha-docs::
+voltha-go::
+voltha-helm-charts::
+voltha-lib-go::
+voltha-omci::
+voltha-onos::
+voltha-openolt-adapter::
+voltha-openonu-adapter::
+voltha-openonu-adapter-go::
+voltha-ponsimolt-adapter::
+voltha-ponsimonu-adapter::
+voltha-protos:v5.4.10:
+voltha-system-tests::
+voltha-test-manifest::

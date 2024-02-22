@@ -1,24 +1,7 @@
-# repo:voltha-release
+# onf-release
+Helper scripts for validating and performing a release.
 
-## [github](./github/README.md)
-
-Example usage for the github command line tool gh.
-
- * authentication
- * repository listing
- * repository search
-
-## [validate](./github/README.md)
-
-A tool used to validate VOTLHA release content.
-Versioning:
-
- * components
- * helm charts
-
-| Path     | Description
-| -------- | ------------------------------------------------------------------ |
-| github   | Standalone prototyping for the github gh repository command        |
-| tagging  | A utility script for validating component versions spread all over the place |
-| validate | standalone prototyping for the github gh repository command        |
-
+| script | Description |
+| ------ | ----------- |
+| artifact | Load ONOS component artfiact repository for viewing versions |
+| bttb     | Branch-tag or tag-branch repositories for release            |

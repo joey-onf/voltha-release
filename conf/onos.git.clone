@@ -1,0 +1,11 @@
+git://gerrit.opencord.org:29418/aaa
+git://gerrit.opencord.org:29418/dhcpl2relay
+git://gerrit.opencord.org:29418/igmpproxy
+git://gerrit.opencord.org:29418/kafka-onos
+git://gerrit.opencord.org:29418/cast
+git://gerrit.opencord.org:29418/olt
+git://gerrit.opencord.org:29418/sadis
+git://gerrit.opencord.org:29418/bng
+git://gerrit.opencord.org:29418/ppoeagent
+git://gerrit.opencord.org:29418/olttopology
+git://gerrit.opencord.org:29418/ofagent-go

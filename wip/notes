@@ -1,0 +1,3 @@
+copyright/
+   - refactor logic, common routines used to identify strings
+     generate date ranges and copyright notice.

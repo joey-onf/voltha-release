@@ -1,0 +1,15 @@
+# -*- makefile -*-
+
+ssh://gerrit.opencord.org:29418/aaa
+ssh://gerrit.opencord.org:29418/dhcpl2relay
+ssh://gerrit.opencord.org:29418/igmpproxy
+ssh://gerrit.opencord.org:29418/kafka-onos
+ssh://gerrit.opencord.org:29418/cast
+ssh://gerrit.opencord.org:29418/olt
+ssh://gerrit.opencord.org:29418/sadis
+ssh://gerrit.opencord.org:29418/bng
+ssh://gerrit.opencord.org:29418/ppoeagent
+ssh://gerrit.opencord.org:29418/olttopology
+ssh://gerrit.opencord.org:29418/ofagent-go
+
+# [EOF]

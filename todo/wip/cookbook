@@ -1,0 +1,20 @@
+1) Open a jira epic for tracking.
+2) Rebuild ONOS components.
+3) repo:voltha-protos
+4) repo:voltha-lib-go
+   - voltha-go
+   - voltha-openolt-adapter
+     - make lint-dockerfile
+     - make lint-sca
+     - make distclean
+     - make mod-tidy
+     - make build test
+     - modify go source -> append // [EOF]
+   - bbsim
+     - find api -name '*.proto' | xargs edit
+     - make lint
+    
+For all repositories:
+    - Update copyright notice date.
+    - make sterile lint build check test
+    - Cosmetic builds to triage failures.

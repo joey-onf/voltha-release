@@ -1,0 +1,4 @@
+# Components are using onos v2.5.5
+# This docker image is using v2.5.8
+
+https://github.com/opencord/voltha-onos/blob/master/Dockerfile.voltha-onos#L92

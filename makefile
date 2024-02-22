@@ -1,74 +1,139 @@
 # -*- makefile -*-
-## ---------------------------------------------------------------------------
-## ---------------------------------------------------------------------------
+## -----------------------------------------------------------------------
+## Intent: Targets in this makefile will clone all voltha repositories
+##         and will invoke a list of makefile targets against each.
+## -----------------------------------------------------------------------
 
-# DEBUG       := true
+null     :=#
+space    :=$(null) $(null)
+HIDE     ?= @
+tab	 	 := $(null)	$(null)
+\t       := $(NULL)	$(NULL)
 
-.PHONY: validate
-.DEFAULT_GOAL := validate
+define newln :=
 
-##-------------------##
-##---]  GLOBALS  [---##
-##-------------------##
-include $(strip \
-  $(dir \
-    $(abspath $(lastword $(MAKEFILE_LIST)))\
-  )\
-)/makefiles/include.mk
 
-# TOP         ?= .
-# MAKEDIR     ?= $(TOP)/makefiles
+endef
 
-# NO-LINT-MAKEFILE := true    # cleanup needed
-NO-LINT-PYTHON   := true    # cleanup needed
-NO-LINT-SHELL    := true    # cleanup needed
+include config.mk
 
-# include $(ONF_MAKEDIR)/include.mk
+$(if $(NO_LINT_LICENSE),$(null),$(eval check += license))
+$(if $(COPYRIGHTS),$(eval check += copyrights))
+check += versions-chart
+check += voltha-protos
+check += voltha-lib-go
 
-tgts += checkout-repos-all
+## -----------------------------------------------------------------------
+## [DEBUG] Display hierarchy details
+## -----------------------------------------------------------------------
+todos = $(wildcard */makefile)
 
-##---------------------##
-##---]  MAKEFILES  [---##
-##---------------------##
-all: $(tgts)
+$(foreach todo_raw,$(todos),\
+ $(foreach todo,$(subst /makefile,$(null),$(todo_raw)),\
+	$(info ** foreach.todo = $(todo))\
+$(if $(debug),\
+$(info \
+	$$(eval \
+$(todo)-%:$(newline)\
+$(\t)$$(MAKE) --no-print-directory -C $(todo) $$@$(newline)\
+)\
+))\
+	$(eval \
+$(todo)-%:$(newline)\
+$(\t)$$(MAKE) --no-print-directory -C $(todo) $$@$(newline)\
+)\
+)\
+)
+
+
+check-subdir += voltha-protos-check
+check-subdir : $(check-subdir)
+.PHONY: $(check)
+
+all += triage-build
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+all: $(all)
+
+triage-build :
+	bin/triage-build.sh
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+edit:
+	./edit.sh
+
+.PHONY: repositories
+repositories:
+	@$(MAKE) --quiet -C $@ --no-print-directory
+
+## -----------------------------------------------------------------------
+## Intent: Iterate and perform validation checks
+## -----------------------------------------------------------------------
+check : $(check) $(check-subdir)
+$(check) : sandbox
+	$(MAKE) -C $@ check
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+.PHONY: sandbox
+sandbox:
+	./sandbox.sh --sandbox $(PWD)/sandbox
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
 clean ::
-
-## -----------------------------------------------------------------------
-## -----------------------------------------------------------------------
-sterile ::
+	$(RM) -r branches
 	$(RM) -r sandbox
-	$(MAKE) triage-clean
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-gather:
-	find sandbox -name 'VERSION' -print0 | xargs -0 cat
+sterile :: clean
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-validate:
-	$(MAKE) -C validate
+help-verbose += voltha-protos-help
+help-verbose : $(help-verbose)
+
+help ::
+	@echo "USAGE: $(MAKE)"
+	@printf '  %-30.30s %s\n' 'sandbox'\
+	  'Clone all voltha repos for validation'
+	@printf '  %-30.30s %s\n' 'edit'\
+	  'Load files of interest into an editor'
+
+	@printf '  %-30.30s %s\n' 'check'\
+	  'Iterate over subdirs and perform repository validation checks'
+	@printf '  %-30.30s %s\n' 'check-help'\
+	  'Display extended help for check targets'
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-view:
-	pandoc README.md | lynx -stdin
+check-help:
+	@printf '  %-30.30s %s\n' 'versions-chart-check'\
+	  'Validate chart file version string dependencies'
+	@printf '  %-30.30s %s\n' 'voltha-protos-check'\
+	  'Validate voltha-protos content'
 
-## -----------------------------------------------------------------------
-## -----------------------------------------------------------------------
-triage:
-	./triage.sh 2>&1 | tee $@.log
+stem-suffix-targets += versions-chart-%
+stem-suffix-targets += voltha-protos-%
 
-triage-clean:
-	$(RM) -r tmp
+check-targets : $(subst -%,-check,$(stem-suffix-targets))
+
+# $@=versions-chart-check: $*=check
+$(stem-suffix-targets) : sandbox
+	$(MAKE) --no-print-directory -C $(subst -$*,$(null),$@) $*
 
 ## ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
-prep:
-	$(onf-mk-root)/go_mod/fix_go_mod.sh
-	@echo '[TODO]: ../etc/copyright_fix.sh'
+%-help:
+   # make -C voltha-protos voltha-protos-help
+	$(HIDE)$(MAKE) --no-print-directory -C $* $@
+
+## ---------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
+view ::
+	$(HIDE)$(MAKE) --no-print-directory -C artifacts $@
 
 # [EOF]

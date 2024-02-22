@@ -1,0 +1,70 @@
+---
+# ONOS Components
+- aaa:
+    onos       : True,
+    package    : "aaa",
+    repository : "aaa",
+    version    : "2.11.0",
+    end-of-rec : True
+- bng:
+    onos       : True 
+    pacakge    : "bng",
+    repository : "bng",
+    version    : "2.5.1",
+    end-of-rec : True
+- dhcp2relay:
+    onos       : True 
+    package    : "dhcp2relay",
+    repository : "dhcp2relay",
+    version    : "2.11.0",
+    end-of-rec : True
+- igmpproxy:
+    onos       : True 
+    package    : "igmpproxy",
+    repository : "igmpproxy",
+    version    : "2.9.0",
+    end-of-rec : True
+- kafka:
+    onos       : True
+    package    : "kafka",
+    repository : "kafka-onos",
+    version    : "2.12.0",
+    end-of-rec : True
+- maclearner:
+    onos       : True
+    package    : "maclearner",
+    repository : "mac-learning",
+    version    : "1.2.3",
+    end-of-rec : True
+- mcast:
+    onos       : True
+    package    : "mcast",
+    repository : "mcast",
+    version    : "2.9.1",
+    end-of-rec : True
+- olt
+    onos       : True
+    package    : "olt",
+    repository : "olt",
+    version    : "5.2.5",
+    end-of-rec : True
+- olttopology:
+    onos       : True
+    package    : "olttopology",
+    repository : "olttopology",
+    version    : "1.3.1",
+    end-of-rec : True
+- pppoeagent:
+    onos       : True
+    package    : "pppoeagent",
+    repository : "pppoeagent",
+    version    : "1.3.0",
+    end-of-rec : True-
+ sadis:
+    onos       : True 
+    package    : "sadis",
+    repository : "sadis",
+    version    : "5.12.2",
+    end-of-rec : True
+
+# [EOF

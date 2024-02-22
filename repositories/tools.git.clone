@@ -1,0 +1,6 @@
+# -*- makefile -*-
+
+ssh://gerrit.opencord.org:29418/copyrights
+ssh://gerrit.opencord.org:29418/onf-make
+
+# [EOF]

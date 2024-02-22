@@ -1,0 +1,49 @@
+--
+# VOLTHA Components
+- voltha-protos :
+    deps        : null,
+    package     : "voltha-protos",
+    repository  : "voltha-protos",
+    version     : "5.4.11",
+    version     : { "development":"5.4.11", "release":"5.4.11" },    
+    end-of-rec  : True
+
+- voltha-lib-go :
+    deps        : ["voltha-protos"],
+    package     : "voltha-lib-go",
+    repository  : "voltha-lib-go",
+    version     : "5.4.11",
+    version     : { "development":"5.4.11", "release":"5.4.11" },    
+    end-of-rec  : True
+
+- voltha-go :
+    deps        : ["voltha-lib-go", "voltha-protos"],
+    package     : "voltha-go",
+    repository  : "voltha-go",
+    version     :
+      "development" : 3.6.0-dev
+      "release"     : 3.5.4
+    end-of-rec  : True
+
+- ofagent-go :
+    deps        : ["voltha-lib-go", "voltha-protos"],
+    package     : "ofagent-go",
+    repository  : "ofagent-go",
+    version     : { "development":null, "release":null },
+    end-of-rec  : True
+
+- voltha-openonu-adapter-go
+    deps        : ["voltha-lib-go", "voltha-protos"],
+    package     : "voltha-openonu-adapter-go",
+    repository  : "voltha-openonu-adapter-go",
+    version     : { "development":null, "release":null },
+    end-of-rec  : True
+
+- voltha-openolt-adapter
+    deps        : ["voltha-lib-go", "voltha-protos"],
+    package     : "voltha-openolt-adapter",
+    repository  : "voltha-openolt-adapter",
+    version     : { "development":null, "release":null },
+    end-of-rec  : True
+
+# [EOF

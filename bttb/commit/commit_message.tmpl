@@ -1,0 +1,12 @@
+[{jira0}] Release patch repo:{repository} (branch={branch})
+
+{jira-tickets}
+    
+VERSION
+.gitreview
+----------
+ o Post release tag & branch patch for branch={branch}.
+ o Bump version string to avoid conflicts:
+   - branch=master  (X.{1+Y}.0)
+   - branch=release (X.Y.{1+Z})
+ o Update .gitreview (defaultpath={branch}), specify rebase/merge target.
