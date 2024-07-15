@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
-'''Unit test for repository/sandbox.py'''
+'''Unit test for repository/sandbox.py.
+Verify sandbox clone function.'''
 
 ##-------------------##
 ##---]  GLOBALS  [---##

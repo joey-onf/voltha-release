@@ -1,5 +1,8 @@
 # -*- python -*-
-'''.'''
+'''Intent:
+  o clone - Checkout broadband repositories into a /var/tmp sandbox.
+  o get   - Return filesystem path to a named sandbox repository.
+'''
 
 ##-------------------##
 ##---]  GLOBALS  [---##

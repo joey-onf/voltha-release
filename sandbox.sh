@@ -132,7 +132,7 @@ function usage()
     cat <<EOH
 Usage: $0
   --edit          Create user branches during clone + checkout
-  --sandbox       Destination directory
+  --sandbox       Destination directory for git clone
 
 EOH
     return
