@@ -3,6 +3,8 @@
 ## Intent:
 ##   o VOLTHA Release helper scirpt
 ##   o Load all artifacts and resource URLS for a given component
+##     into a browser for viewing, copy & paste.
+##   o URLs resolve to - docker, gerrit & github, maven, nexus, pypi
 ## -----------------------------------------------------------------------
 
 # https://gerrit.opencord.org/plugins/gitiles/voltha-protos/+/refs/tags/v5.4.8
@@ -13,8 +15,10 @@
 set -euo pipefail
 declare -g -a urls=()
 
-BROWSER='firefox'
-# BROWSER={BROWSER:-firefox}
+# BROWSER='firefox'
+#BROWSER={BROWSER:-google-chrome}
+BROWSER={BROWSER:-firefox}
+#BROWSER={BROWSER:-opera}
 
 ## -----------------------------------------------------------------------
 ## -----------------------------------------------------------------------
@@ -22,10 +26,25 @@ function error()
 {
     echo "${FUNCNAME[1]} ERROR: $*"
     exit 1
+}
+
+## -----------------------------------------------------------------------
+## -----------------------------------------------------------------------
+function banner()
+{
+    cat <<EOM
+
+** -----------------------------------------------------------------------
+** IAM: ${FUNCNAME[1]}
+** $@
+** -----------------------------------------------------------------------
+EOM
     return
 }
 
 ## -----------------------------------------------------------------------
+## Intent: Mapping function, translate ONOS component from project
+##   shorthand name to literal repository name.
 ## -----------------------------------------------------------------------
 function normalize()
 {
@@ -34,7 +53,7 @@ function normalize()
 
     ## Normalize package name for URLS
     case "$name" in
-	igmpproxy) name="onos-app-igmpproxy" ;;
+        'igmpproxy') name="onos-app-igmpproxy" ;;
     esac
 
     ref="$name"
@@ -42,14 +61,19 @@ function normalize()
 }
 
 ## -----------------------------------------------------------------------
+## Intent: Render a list of docker URLs for a named project resource.
+##   o convenience access for viewing
+##   o URLs will eventually be copied into VOLTHA release notes.
 ## -----------------------------------------------------------------------
 function do_docker()
 {
+    banner "Not Yet Implemented"
+
     error "NOT YET IMPLEMENTED"
 
     # https://hub.docker.com/search?q=voltha
     # https://hub.docker.com/r/voltha/voltha-onos
-    
+
     ## [DOCKER]
     # https://hub.docker.com/r/voltha/voltha-protos/tags
     # https://hub.docker.com/layers/voltha/voltha-protos/latest/images/sha256-a1b219b5e5c7e14225a926fafc53979943382d4729dee74c6aea86b3153e56ea?context=explore
@@ -57,6 +81,9 @@ function do_docker()
 }
 
 ## -----------------------------------------------------------------------
+## Intent: Render a list of voltha.org URLs for a named resource:
+##   o convenience access for viewing
+##   o URLs will eventually be copied into VOLTHA release notes.
 ## -----------------------------------------------------------------------
 function gen_docs_voltha_org()
 {
@@ -64,18 +91,21 @@ function gen_docs_voltha_org()
     local ver="$1"; shift
     local -n buffer="$1"; shift
 
+    banner "Not Yet Implemented"
+
     buffer=()
     #   * - `igmpproxy <https://gerrit.opencord.org/gitweb?p=igmpproxy.git;a=summary>`_
-     -
-#     - `2.8.0 <https://mvnrepository.com/artifact/org.opencord/onos-app-igmpproxy>`__
-#       `staging <https://central.sonatype.com/artifact/org.opencord/onos-app-igmpproxy>`__
-#     - `app <https://mvnrepository.com/artifact/org.opencord/onos-app-igmpproxy-app/2.8.0>`__
-#       `api <https://mvnrepository.com/artifact/org.opencord/onos-app-igmpproxy-api/2.8.0>`__
-     #       `pkg <https://mvnrepository.com/artifact/org.opencord/onos-app-igmpproxy>`__
-     return
+    -
+    #     - `2.8.0 <https://mvnrepository.com/artifact/org.opencord/onos-app-igmpproxy>`__
+    #       `staging <https://central.sonatype.com/artifact/org.opencord/onos-app-igmpproxy>`__
+    #     - `app <https://mvnrepository.com/artifact/org.opencord/onos-app-igmpproxy-app/2.8.0>`__
+    #       `api <https://mvnrepository.com/artifact/org.opencord/onos-app-igmpproxy-api/2.8.0>`__
+    #       `pkg <https://mvnrepository.com/artifact/org.opencord/onos-app-igmpproxy>`__
+    return
 }
 
 ## -----------------------------------------------------------------------
+## Intent: Render a list of project resource URLs.
 ## -----------------------------------------------------------------------
 function do_golang()
 {
@@ -84,13 +114,14 @@ function do_golang()
     local ver="$1"; shift
 
     case "$pkg" in
-	voltha-protos) ref+=('https://pkg.go.dev/github.com/opencord/voltha-protos/v5') ;;
+        'voltha-protos') ref+=('https://pkg.go.dev/github.com/opencord/voltha-protos/v5') ;;
     esac
 
     return
 }
 
 ## -----------------------------------------------------------------------
+## Intent: Generate a list of project python artifact urls
 ## -----------------------------------------------------------------------
 function do_pypi()
 {
@@ -99,7 +130,7 @@ function do_pypi()
     local ver="$1"; shift
 
     case "$pkg" in
-	voltha-protos) ref+=("https://pypi.org/project/${pkg}/") ;;
+        voltha-protos) ref+=("https://pypi.org/project/${pkg}/") ;;
     esac
     return
 }
@@ -134,7 +165,7 @@ EOH
   - Load staging artifacts for component mcast
 
 EOH
-    
+
     return
 }
 
@@ -148,75 +179,73 @@ while [ $# -gt 0 ]; do
     arg="$1"; shift
     case "$arg" in
 
-	-*go*)    declare -i argv_golang=1 ;;
-	-*docker) declare -i argv_docker=1 ;;
-	-*gerrit) declare -i argv_gerrit=1 ;;
-	-*github) declare -i argv_github=1 ;;
-	-*pypi)   declare -i argv_github=1 ;;
+        -*go*)    declare -i argv_golang=1 ;;
+        -*docker) declare -i argv_docker=1 ;;
+        -*gerrit) declare -i argv_gerrit=1 ;;
+        -*github) declare -i argv_github=1 ;;
+        -*pypi)   declare -i argv_github=1 ;;
 
-	--gen)
-	    declare -a html=()
-	    gen_docs_voltha_org	"${package[0]}" "${version[0]}" html
-	    echo "${html[@]}"
-	    ;;
-	--mvn|--maven)
-	    prefixes+=('https://mvnrepository.com/artifact/org.opencord')
-	    ;;
-	--nexus*)
-	    prefixes+=('https://central.sonatype.com/artifact/org.opencord')
-	    ;;
+        --gen)
+            declare -a html=()
+            gen_docs_voltha_org "${package[0]}" "${version[0]}" html
+            echo "${html[@]}"
+            ;;
+        --mvn|--maven)
+            prefixes+=('https://mvnrepository.com/artifact/org.opencord')
+            ;;
+        --nexus*)
+            prefixes+=('https://central.sonatype.com/artifact/org.opencord')
+            ;;
 
-	--pkg|--pac*)
-	    arg="$1"; shift
-	    package=''
-	    normalize "$arg" package
-	    packages+=("$package")
-	    ;;
+        --pkg|--pac*)
+            arg="$1"; shift
+            package=''
+            normalize "$arg" package
+            packages+=("$package")
+            ;;
 
-	-*ver*) versions+=("$1"); shift ;;
+        -*ver*) versions+=("$1"); shift ;;
     esac
 done
 
 [[ ${#packages[@]} -eq 0 ]] && error "--package is required"
 #[[ ${#prefixes[@]} -eq 0 ]] && error "--docker --mvn and/or --nexus are required"
 
-
-firefox    # target of URLs launched
-
 ## -----------------------------------------------------------------------
+## Intent: Generate URL variants with type and version
 ## -----------------------------------------------------------------------
 declare -p prefixes
 declare -p packages
 for prefix in "${prefixes[@]}";
 do
-for package in "${packages[@]}";
-do
-    [[ -v argv_docker ]] && do_docker
-    [[ -v argv_golang ]] && do_golang url "$package" "$ver"
-    [[ -v argv_pypi ]]   && do_pypi   url "$package" "$ver"
+    for package in "${packages[@]}";
+    do
+        [[ -v argv_docker ]] && do_docker
+        [[ -v argv_golang ]] && do_golang url "$package" "$ver"
+        [[ -v argv_pypi ]]   && do_pypi   url "$package" "$ver"
 
+        pkg="${prefix}/${package}"
+        api="${prefix}/${package}-api"
+        app="${prefix}/${package}-app"
 
-    pkg="${prefix}/${package}"
-    api="${prefix}/${package}-api"
-    app="${prefix}/${package}-app"
+        if [ ${#versions[@]} -eq 0 ]; then
+            urls+=("$pkg")
+            urls+=("$api")
+            urls+=("$app")
+        else
+            for ver in "${versions[@]}";
+            do
+                urls+=("$pkg/$ver")
+                urls+=("$api/$ver")
+                urls+=("$app/$ver")
+            done
+        fi
 
-    if [ ${#versions[@]} -eq 0 ]; then
-	urls+=("$pkg")
-	urls+=("$api")
-	urls+=("$app")
-    else
-	for ver in "${versions[@]}";
-	do
-	    urls+=("$pkg/$ver")
-	    urls+=("$api/$ver")
-	    urls+=("$app/$ver")
-	done
-    fi
-
-done # packages
+    done # packages
 done # prefixes
 
 ## -----------------------------------------------------------------------
+## Intent: Generate github & gerrit URL variants
 ## -----------------------------------------------------------------------
 for package in "${packages[@]}";
 do
@@ -228,22 +257,22 @@ do
 
     for ver in "${versions[@]}";
     do
-	[[ -v argv_gerrit ]] && urls+=("$gerrit/+/refs/tags/v${ver}")
-	[[ -v argv_github ]] && urls+=("$github/tree/v${ver}")
-	# https://gerrit.opencord.org/plugins/gitiles/voltha-protos/+/refs/tags/v5.4.8
-	# https://gerrit.opencord.org/plugins/gitiles/voltha-protos/+/refs/tags/5.4.8
+        [[ -v argv_gerrit ]] && urls+=("$gerrit/+/refs/tags/v${ver}")
+        [[ -v argv_github ]] && urls+=("$github/tree/v${ver}")
+        # https://gerrit.opencord.org/plugins/gitiles/voltha-protos/+/refs/tags/v5.4.8
+        # https://gerrit.opencord.org/plugins/gitiles/voltha-protos/+/refs/tags/5.4.8
     done
 
 done
 
 
-    declare -p urls | tr '=' '\n' | grep '://'
-    declare -a tmp=()
-    for url in "${urls[@]}";
-    do
-	tmp+=('--new-tab' "$url")
-    done
+declare -p urls | tr '=' '\n' | grep '://'
+declare -a tmp=()
+for url in "${urls[@]}";
+do
+    tmp+=('--new-tab' "$url")
+done
 
-    "$BROWSER" "${tmp[@]}" &
+"$BROWSER" "${tmp[@]}" &
 
 # [EOF]
